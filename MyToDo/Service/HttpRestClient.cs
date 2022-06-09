@@ -18,11 +18,12 @@ namespace MyToDo.Service
         public HttpRestClient(string apiUrl)
         {
             this.apiUrl = apiUrl;
+            client = new RestClient();
         }
 
         public async Task<ApiResponse> ExcuteAsync(BaseRequest baseRequest)
         {
-            var request = new RestRequest(Method.GET);
+            var request = new RestRequest(baseRequest.Method);
             request.AddHeader("Content-Type", baseRequest.ContentType);
             if(baseRequest.Parameter!=null)
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter),ParameterType.RequestBody);
@@ -35,15 +36,23 @@ namespace MyToDo.Service
 
         public async Task<ApiResponse<T>> ExcuteAsync<T>(BaseRequest baseRequest)
         {
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Content-Type", baseRequest.ContentType);
-            if (baseRequest.Parameter != null)
-                request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
+            try
+            {
+                var request = new RestRequest(baseRequest.Method);
+                request.AddHeader("Content-Type", baseRequest.ContentType);
+                if (baseRequest.Parameter != null)
+                    request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
+                 
+                client.BaseUrl = new Uri(apiUrl + baseRequest.Route);
+                var response = await client.ExecuteAsync(request);
 
-            client.BaseUrl = new Uri(apiUrl + baseRequest.Route);
-            var response = await client.ExecuteAsync(request);
-
-            return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+                var content = JsonConvert.DeserializeObject(response.Content); 
+                return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<T>();
+            }
         }
 
     }
