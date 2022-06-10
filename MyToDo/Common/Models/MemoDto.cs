@@ -40,9 +40,9 @@ namespace MyToDo.Common.Models
             set { createDate = value; }
         }
 
-        private int status;
+        private bool status;
 
-        public int Status
+        public bool Status
         {
             get { return status; }
             set { status = value; }

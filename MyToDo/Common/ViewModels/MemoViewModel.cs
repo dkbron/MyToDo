@@ -1,6 +1,10 @@
 ﻿using MyToDo.Common.Models;
+using MyToDo.Service;
+using MyToDo.Shared.Parameters;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,14 +14,13 @@ using System.Threading.Tasks;
 
 namespace MyToDo.Common.ViewModels
 {
-    public class MemoViewModel:BindableBase
+    public class MemoViewModel:NavigationViewModel
     {
-        public MemoViewModel()
+        public MemoViewModel(IMemoService service, IContainerProvider containerProvider):base(containerProvider)
         {
-            AddMemoCommand = new DelegateCommand(CreateMemoData);
-
-            MemoDtos = new ObservableCollection<MemoDto>();
-            CreateMemoData();
+            AddMemoCommand = new DelegateCommand(CreateDataAsync); 
+            MemoDtos = new ObservableCollection<MemoDto>(); 
+            this.service = service; 
         }
         private ObservableCollection<MemoDto> memoDtos;
 
@@ -28,6 +31,7 @@ namespace MyToDo.Common.ViewModels
         }
 
         private bool isRightDrawerOpen;
+        private readonly IMemoService service;
 
         public bool IsRightDrawerOpen
         {
@@ -43,12 +47,31 @@ namespace MyToDo.Common.ViewModels
             IsRightDrawerOpen = true;
         }
 
-        public void CreateMemoData()
+        public async void CreateDataAsync()
         {
-            for (int i = 1; i < 10; i++)
+            UpdateLoading(true);
+            var result = await service.GetAllAsync(new QueryParameter
             {
-                MemoDtos.Add(new MemoDto() { Id = i, Title = $"备忘{i}", Content = $"{i}事件.....", Status = 1, CreateDate = DateTime.Now.Date });
+                PageIndex = 0,
+                PageSize = 100
             }
+            );
+
+            if(result.Status)
+            {
+                memoDtos.Clear();
+                foreach(var item in result.Result.Items)
+                {
+                    MemoDtos.Add(item);
+                }
+            } 
+            UpdateLoading(false);
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+            CreateDataAsync();
         }
 
     }

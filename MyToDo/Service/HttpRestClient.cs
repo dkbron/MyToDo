@@ -51,7 +51,7 @@ namespace MyToDo.Service
             }
             catch (Exception ex)
             {
-                return new ApiResponse<T>();
+                return new ApiResponse<T>("");
             }
         }
 

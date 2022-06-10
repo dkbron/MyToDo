@@ -127,3 +127,5 @@ E:\C#\MyToDo\MyToDo\bin\Debug\net5.0-windows\MyToDo.Api.dll
 E:\C#\MyToDo\MyToDo\bin\Debug\net5.0-windows\MyToDo.Shared.dll
 E:\C#\MyToDo\MyToDo\bin\Debug\net5.0-windows\MyToDo.Api.pdb
 E:\C#\MyToDo\MyToDo\bin\Debug\net5.0-windows\MyToDo.Shared.pdb
+E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\ProgressView.g.cs
+E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\ProgressView.baml

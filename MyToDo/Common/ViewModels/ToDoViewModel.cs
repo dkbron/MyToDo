@@ -2,24 +2,26 @@
 using MyToDo.Service;
 using MyToDo.Shared.Parameters;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyToDo.Common.ViewModels
 {
-    public class ToDoViewModel : BindableBase
+    public class ToDoViewModel : NavigationViewModel
     {
-        public ToDoViewModel(IToDoService service)
+        public ToDoViewModel(IToDoService service, IContainerProvider containerProvider) : base(containerProvider)
         {
             ToDoDtos = new ObservableCollection<ToDoDto>();
             AddToDoCommand = new DelegateCommand(AddToDo); 
-            this.service = service;
-            CreateToDoData();
+            this.service = service; 
         }
 
         private ObservableCollection<ToDoDto> toDoDtos;
@@ -47,8 +49,10 @@ namespace MyToDo.Common.ViewModels
             IsRightDrawerOpen = true;
         } 
 
-        public async void CreateToDoData()
-        { 
+        public async void CreateDataAsync()
+        {
+            UpdateLoading(true);
+
             var toDoResult = await service.GetAllAsync(
                 new QueryParameter {
                 PageIndex = 0,
@@ -57,13 +61,31 @@ namespace MyToDo.Common.ViewModels
 
             if(toDoResult.Status)
             {
-                toDoDtos.Clear();
+                ToDoDtos.Clear();
                 foreach (var toDoItem in toDoResult.Result.Items)
                 {
                     ToDoDtos.Add(toDoItem);
                 }
+                //new Task(() =>
+                //{
+                //    Application.Current.Dispatcher.Invoke(() =>
+                //    {
+                //        foreach (var toDoItem in toDoResult.Result.Items)
+                //        {
+                //            ToDoDtos.Add(toDoItem);
+                //        }
+                //    }
+                //    ); 
+                //}).Start(); 
             }
 
+            UpdateLoading(false);
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+            CreateDataAsync();
         }
 
     }

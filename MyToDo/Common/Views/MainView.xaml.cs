@@ -1,4 +1,6 @@
-﻿using Prism.DryIoc;
+﻿using MyToDo.Extensions;
+using Prism.DryIoc;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +22,18 @@ namespace MyToDo.Common.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+        public MainView(IEventAggregator aggregator)
         {
             InitializeComponent();
+
+            aggregator.Register(args =>
+            {
+                DialogHost.IsOpen = args.IsOpen;
+
+                if (DialogHost.IsOpen) 
+                    DialogHost.DialogContent = new ProgressView();  
+            });
+
             InitColorZoneNavigateBtn();
 
             ListBoxMenuBar.SelectionChanged += (s, e) =>
