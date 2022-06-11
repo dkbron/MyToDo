@@ -33,9 +33,9 @@ namespace MyToDo.Shared.Dtos
             set { createDate = value; }
         }
 
-        private bool status;
+        private int status;
 
-        public bool Status
+        public int Status
         {
             get { return status; }
             set { status = value; }

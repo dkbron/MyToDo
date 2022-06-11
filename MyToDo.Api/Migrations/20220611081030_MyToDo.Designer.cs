@@ -9,7 +9,7 @@ using MyToDo.Api.Context;
 namespace MyToDo.Api.Migrations
 {
     [DbContext(typeof(MyToDoContext))]
-    [Migration("20220529150221_MyToDo")]
+    [Migration("20220611081030_MyToDo")]
     partial class MyToDo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +30,7 @@ namespace MyToDo.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
@@ -56,7 +56,7 @@ namespace MyToDo.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")

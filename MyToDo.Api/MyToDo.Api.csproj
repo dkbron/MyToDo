@@ -23,4 +23,8 @@
     <ProjectReference Include="..\MyToDo.Shared\MyToDo.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MyToDo.Common.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -15,24 +16,32 @@
                     <TextBlock Text="添加代办"
                                FontSize="20"
                                Margin="20"
-                               FontWeight="Bold"/>
-                    <StackPanel Orientation="Horizontal" Margin="20 0">
-                        <TextBlock Text="状态:" VerticalAlignment="Center"/>
+                               FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="20 0">
+                        <TextBlock Text="状态:"
+                                   VerticalAlignment="Center" />
                         <ComboBox Width="80"
                                   Margin="10 0"
-                                  VerticalAlignment="Center">
-                            <ComboBoxItem Content="全部" />
+                                  VerticalAlignment="Center"
+                                  SelectedIndex="{Binding CurrentDto.Status}">
                             <ComboBoxItem Content="代办" />
                             <ComboBoxItem Content="已完成" />
                         </ComboBox>
                     </StackPanel>
-                    <TextBox materialDesign:HintAssist.Hint="请输入待办概要" Margin="20 10"
-                             Width="250"/>
+                    <TextBox materialDesign:HintAssist.Hint="请输入待办概要"
+                             Margin="20 10"
+                             Text="{Binding CurrentDto.Title}"
+                             Width="250" />
                     <TextBox materialDesign:HintAssist.Hint="请输入待办事项内容"
+                             Text="{Binding CurrentDto.Content}"
                              Margin="20 10"
                              Width="250"
-                             Height="90"/>
-                    <Button Content="添加到待办"  Margin="20 0" />
+                             Height="90" />
+                    <Button Content="添加到待办"
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="更新"
+                            Margin="20 0" />
 
                 </StackPanel>
             </materialDesign:DrawerHost.RightDrawerContent>
@@ -41,15 +50,20 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-
-
                 <StackPanel Orientation="Horizontal"
                             Margin="0 5 0 0">
                     <TextBox Width="250"
                              Margin="10 0 0 0"
                              VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="查找代办事项..."
-                             materialDesign:TextFieldAssist.HasClearButton="True" />
+                             Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:TextFieldAssist.HasClearButton="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter"
+                                        Command="{Binding ExecuteCommand}"
+                                        CommandParameter="查询" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <TextBlock Text="筛选:"
                                Margin="10 0 0 0"
                                VerticalAlignment="Center" />
@@ -65,25 +79,32 @@
                         Margin="10 5"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Command="{Binding AddToDoCommand}"/>
+                        Command="{Binding ExecuteCommand}"
+                        CommandParameter="新增" />
                 <ScrollViewer Grid.Row="1"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <ItemsControl Grid.Row="1"
-                              ItemsSource="{Binding ToDoDtos}"
-                              HorizontalAlignment="Center">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                                  ItemsSource="{Binding ToDoDtos}"
+                                  HorizontalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
                                     <Grid Width="220"
                                           MinHeight="180"
                                           MaxHeight="250"
                                           Margin="10 10 0 0">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                <i:InvokeCommandAction CommandParameter="{Binding}"
+                                                                       Command="{Binding DataContext.SelectedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto" />
                                             <RowDefinition />
@@ -124,11 +145,11 @@
                                     </Grid>
                                 </materialDesign:TransitioningContent>
                             </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
             </Grid>
         </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
- 
+
 </UserControl>

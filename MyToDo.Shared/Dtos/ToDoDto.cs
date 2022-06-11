@@ -10,7 +10,7 @@ namespace MyToDo.Shared.Dtos
     {
         private string title;
         private string content;
-        private bool status;
+        private int status;
 
         public string Title
         {
@@ -32,7 +32,7 @@ namespace MyToDo.Shared.Dtos
             }
         }
 
-        public bool Status
+        public int Status
         {
             get { return status; }
             set

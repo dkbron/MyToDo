@@ -15,7 +15,7 @@ namespace MyToDo.Api.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -32,7 +32,7 @@ namespace MyToDo.Api.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },

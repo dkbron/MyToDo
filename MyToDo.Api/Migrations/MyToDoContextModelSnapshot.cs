@@ -28,7 +28,7 @@ namespace MyToDo.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
@@ -54,7 +54,7 @@ namespace MyToDo.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
