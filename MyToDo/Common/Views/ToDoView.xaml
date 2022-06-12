@@ -83,7 +83,7 @@
                         CommandParameter="新增" />
                 <ScrollViewer Grid.Row="1"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                    <ItemsControl Grid.Row="1"
+                    <ItemsControl
                                   ItemsSource="{Binding ToDoDtos}"
                                   HorizontalAlignment="Center">
                         <ItemsControl.ItemsPanel>

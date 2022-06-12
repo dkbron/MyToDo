@@ -73,8 +73,8 @@ namespace MyToDo.Common.ViewModels
 
             for (int i = 1; i < 10; i++)
             {
-                ToDoDtos.Add(new ToDoDto() { Id = i, Title =$"代办事项{i}", Content=$"{i}事件.....", Status=true, CreateDate= DateTime.Now.Date  });
-                MemoDtos.Add(new MemoDto() { Id = i, Title =$"备忘录{i}", Content=$"{i}事件.....", Status= true, CreateDate= DateTime.Now.Date  });
+                ToDoDtos.Add(new ToDoDto() { Id = i, Title =$"代办事项{i}", Content=$"{i}事件.....", Status=1, CreateDate= DateTime.Now.Date  });
+                MemoDtos.Add(new MemoDto() { Id = i, Title =$"备忘录{i}", Content=$"{i}事件.....", Status= 1, CreateDate= DateTime.Now.Date  });
             }
         }
     }

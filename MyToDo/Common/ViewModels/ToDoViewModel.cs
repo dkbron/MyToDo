@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -86,7 +87,11 @@ namespace MyToDo.Common.ViewModels
         public ObservableCollection<ToDoDto> ToDoDtos
         {
             get { return toDoDtos; }
-            set { toDoDtos = value; RaisePropertyChanged(); }
+            set
+            {
+                toDoDtos = value; 
+                RaisePropertyChanged(); 
+            }
         }
 
         private bool isRightDrawerOpen;
@@ -105,6 +110,7 @@ namespace MyToDo.Common.ViewModels
         public void Add()
         {
             IsRightDrawerOpen = true;
+
         }
 
         private async void Save()
@@ -112,30 +118,37 @@ namespace MyToDo.Common.ViewModels
             if (String.IsNullOrWhiteSpace(CurrentDto.Title) || String.IsNullOrWhiteSpace(CurrentDto.Content))
                 return;
 
-            UpdateLoading(true);
+            UpdateLoading(true); 
             try
             {
                 if (CurrentDto.Id > 0)
                 {
                     var updateResult = await service.UpdateAsync(CurrentDto);
                     if (updateResult.Status)
-                    {
-                        var toDo = ToDoDtos.FirstOrDefault(t => t.Id == currentDto.Id);
+                    { 
+                        var toDo = ToDoDtos.FirstOrDefault(t => t.Id == CurrentDto.Id); 
                         if (toDo != null)
                         {
-                            toDo.Title = currentDto.Title;
-                            toDo.Content = currentDto.Content;
-                            toDo.Status = currentDto.Status;
+                            toDo.Title = CurrentDto.Title;
+                            toDo.Content = CurrentDto.Content;
+                            toDo.Status = CurrentDto.Status;
+
+                            //上方数据改变后前端数据没有更新，是深浅拷贝的问题，先移除数据后在插入数据可正常更新
+                            ToDoDtos.Remove(toDo);
+                            ToDoDtos.Insert(0,toDo); 
                         }
-                    }
+
+                        //ObservableCollection<ToDoDto> tempCollection = ToDoDtos;
+                        //ToDoDtos = new ObservableCollection<ToDoDto>();
+
+                        //ToDoDtos = tempCollection;
+                    }  
                 }
                 else
                 {
                     var addResult = await service.AddAsync(CurrentDto);
-                    if (addResult.Status)
-                    {
-                        ToDoDtos.Add(currentDto);
-                    }
+                    if (addResult.Status) 
+                        ToDoDtos.Add(addResult.Result);
                 }
             }
             catch (Exception ex)
@@ -144,8 +157,8 @@ namespace MyToDo.Common.ViewModels
             }
             finally
             {
-                UpdateLoading(false);
-                isRightDrawerOpen = false;
+                UpdateLoading(false); 
+                IsRightDrawerOpen = false;
             }
 
 
