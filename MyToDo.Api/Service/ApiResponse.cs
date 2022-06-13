@@ -2,6 +2,10 @@
 {
     public class ApiResponse
     {
+        public ApiResponse()
+        {
+
+        }
         public ApiResponse(string message, bool status = false)
         {
             this.Message = message;

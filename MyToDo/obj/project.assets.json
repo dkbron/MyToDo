@@ -2312,23 +2312,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\DKBorn\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\34272\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\C#\\MyToDo\\MyToDo\\MyToDo.csproj",
+      "projectUniqueName": "C:\\Learning\\MyToDo\\MyToDo\\MyToDo.csproj",
       "projectName": "MyToDo",
-      "projectPath": "E:\\C#\\MyToDo\\MyToDo\\MyToDo.csproj",
-      "packagesPath": "C:\\Users\\DKBorn\\.nuget\\packages\\",
-      "outputPath": "E:\\C#\\MyToDo\\MyToDo\\obj\\",
+      "projectPath": "C:\\Learning\\MyToDo\\MyToDo\\MyToDo.csproj",
+      "packagesPath": "C:\\Users\\34272\\.nuget\\packages\\",
+      "outputPath": "C:\\Learning\\MyToDo\\MyToDo\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\DKBorn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\34272\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2342,8 +2343,8 @@
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
           "projectReferences": {
-            "E:\\C#\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj": {
-              "projectPath": "E:\\C#\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj"
+            "C:\\Learning\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj": {
+              "projectPath": "C:\\Learning\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj"
             }
           }
         }
@@ -2385,6 +2386,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[5.0.16, 5.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -2393,7 +2400,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

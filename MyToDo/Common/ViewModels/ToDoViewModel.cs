@@ -23,7 +23,7 @@ namespace MyToDo.Common.ViewModels
             ToDoDtos = new ObservableCollection<ToDoDto>();
             ExecuteCommand = new DelegateCommand<string>(Execute);
             SelectedCommand = new DelegateCommand<ToDoDto>(Selected);
-
+            DeleteCommand = new DelegateCommand<ToDoDto>(Delete);
             this.service = service;
         }
 
@@ -56,12 +56,10 @@ namespace MyToDo.Common.ViewModels
             {
                 case "新增": Add(); break;
                 case "查询": CreateDataAsync(); break;
-                case "更新": Save(); break;
-
-
+                case "更新": Save(); break; 
             }
         }
-
+         
         private string search;
         /// <summary>
         /// 查询条件
@@ -107,10 +105,12 @@ namespace MyToDo.Common.ViewModels
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> SelectedCommand { get; private set; }
 
+        public DelegateCommand<ToDoDto> DeleteCommand { get; private set; }
+
         public void Add()
         {
             IsRightDrawerOpen = true;
-
+            CurrentDto = new ToDoDto();
         }
 
         private async void Save()
@@ -123,32 +123,36 @@ namespace MyToDo.Common.ViewModels
             {
                 if (CurrentDto.Id > 0)
                 {
-                    var updateResult = await service.UpdateAsync(CurrentDto);
+                    var updateResult = await service.UpdateAsync(CurrentDto); 
                     if (updateResult.Status)
                     { 
-                        var toDo = ToDoDtos.FirstOrDefault(t => t.Id == CurrentDto.Id); 
+                        var toDo = ToDoDtos.FirstOrDefault(t => t.Id == CurrentDto.Id);  
                         if (toDo != null)
                         {
+                            int index = ToDoDtos.IndexOf(toDo);
+
                             toDo.Title = CurrentDto.Title;
                             toDo.Content = CurrentDto.Content;
                             toDo.Status = CurrentDto.Status;
 
                             //上方数据改变后前端数据没有更新，是深浅拷贝的问题，先移除数据后在插入数据可正常更新
                             ToDoDtos.Remove(toDo);
-                            ToDoDtos.Insert(0,toDo); 
+                            ToDoDtos.Insert(index, toDo); 
                         }
 
                         //ObservableCollection<ToDoDto> tempCollection = ToDoDtos;
                         //ToDoDtos = new ObservableCollection<ToDoDto>();
 
                         //ToDoDtos = tempCollection;
-                    }  
+                    }
                 }
                 else
                 {
                     var addResult = await service.AddAsync(CurrentDto);
-                    if (addResult.Status) 
+                    if (addResult.Status)
+                    {
                         ToDoDtos.Add(addResult.Result);
+                    }
                 }
             }
             catch (Exception ex)
@@ -160,9 +164,6 @@ namespace MyToDo.Common.ViewModels
                 UpdateLoading(false); 
                 IsRightDrawerOpen = false;
             }
-
-
-
         }
 
         public async void CreateDataAsync()
@@ -186,6 +187,18 @@ namespace MyToDo.Common.ViewModels
                 }
             }
             UpdateLoading(false);
+        } 
+
+        private async void Delete(ToDoDto toDoDto)
+        {
+            var toDoResult = await service.DeleteAsync(toDoDto.Id);
+
+            if(toDoResult!=null && toDoResult.Status)
+            {
+                var item = ToDoDtos.FirstOrDefault(x => x.Id == toDoDto.Id);
+                if(item != null)
+                    ToDoDtos.Remove(item);
+            }
         }
 
         public override void OnNavigatedTo(NavigationContext navigationContext)

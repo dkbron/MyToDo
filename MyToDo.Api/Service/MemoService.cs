@@ -29,7 +29,7 @@ namespace MyToDo.Api.Service
                 await repository.InsertAsync(meMo);
 
                 if (await unitOfWork.SaveChangesAsync() > 0)
-                    return new ApiResponse(true, model);
+                    return new ApiResponse(true, meMo);
                 return new ApiResponse("添加数据失败");
             }
             catch (Exception ex)

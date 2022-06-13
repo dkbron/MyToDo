@@ -31,9 +31,9 @@ namespace MyToDo.Service
 
         public async Task<ApiResponse> DeleteAsync(int id)
         {
-            BaseRequest request = new BaseRequest();
-            request.Method = RestSharp.Method.POST;
-            request.Route = $"api/{serviceName}/delete?id={id}"; 
+            BaseRequest request = new BaseRequest(); 
+            request.Method = RestSharp.Method.DELETE; 
+            request.Route = $"api/{serviceName}/Delete?id={id}"; 
             return await client.ExcuteAsync(request);
         }
 
