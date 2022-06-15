@@ -70,6 +70,15 @@ namespace MyToDo.Common.ViewModels
             set { search = value; RaisePropertyChanged(); }
         }
 
+        private int statusIndex;
+
+        public int StatusIndex
+        {
+            get { return statusIndex; }
+            set { statusIndex = value;  RaisePropertyChanged(); }
+        }
+
+
 
         private ToDoDto currentDto;
 
@@ -166,16 +175,31 @@ namespace MyToDo.Common.ViewModels
             }
         }
 
+        private async void Delete(ToDoDto toDoDto)
+        {
+            var toDoResult = await service.DeleteAsync(toDoDto.Id);
+
+            if (toDoResult != null && toDoResult.Status)
+            {
+                var item = ToDoDtos.FirstOrDefault(x => x.Id == toDoDto.Id);
+                if (item != null)
+                    ToDoDtos.Remove(item);
+            }
+        }
+
         public async void CreateDataAsync()
         {
             UpdateLoading(true);
 
-            var toDoResult = await service.GetAllAsync(
-                new QueryParameter
+            int? statusIndex = StatusIndex == 0 ? null : StatusIndex == 2 ? 1 : 0;
+
+            var toDoResult = await service.GetAllFilterAsync(
+                new ToDoParameter
                 {
                     PageIndex = 0,
                     PageSize = 100,
-                    Search = this.Search
+                    Search = this.Search,
+                    StatusIndex = statusIndex
                 });
 
             if (toDoResult.Status)
@@ -187,19 +211,7 @@ namespace MyToDo.Common.ViewModels
                 }
             }
             UpdateLoading(false);
-        } 
-
-        private async void Delete(ToDoDto toDoDto)
-        {
-            var toDoResult = await service.DeleteAsync(toDoDto.Id);
-
-            if(toDoResult!=null && toDoResult.Status)
-            {
-                var item = ToDoDtos.FirstOrDefault(x => x.Id == toDoDto.Id);
-                if(item != null)
-                    ToDoDtos.Remove(item);
-            }
-        }
+        }  
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {

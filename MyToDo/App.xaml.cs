@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using MyToDo.Common;
 using MyToDo.Common.ViewModels;
 using MyToDo.Common.Views;
 using MyToDo.Service;
@@ -22,6 +23,15 @@ namespace MyToDo
         protected override Window CreateShell()
         {
             return Container.Resolve<MainView>();
+        }
+
+        protected override void OnInitialized()
+        {
+            var service = App.Current.MainWindow.DataContext as IConfigureService;
+            if(service!=null)
+                service.Configure();
+
+            base.OnInitialized();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

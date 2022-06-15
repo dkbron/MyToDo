@@ -80,6 +80,27 @@ namespace MyToDo.Api.Service
             }
         }
 
+        public async Task<ApiResponse> GetAllAsync(ToDoParameter parameter)
+        {
+            try
+            {
+                var respository = unitOfWork.GetRepository<ToDo>();
+                var toDos = await respository.GetPagedListAsync(predicate:
+                     x => (string.IsNullOrWhiteSpace(parameter.Search) ? true : x.Title.Contains(parameter.Search)) &&
+                     (parameter.StatusIndex==null?true:x.Status.Equals(parameter.StatusIndex)),
+                     pageIndex: parameter.PageIndex,
+                     pageSize: parameter.PageSize,
+                     orderBy: source => source.OrderByDescending(t => t.CreateDate));
+
+                return new ApiResponse(true, toDos);
+
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(ex.Message);
+            }
+        }
+
         public async Task<ApiResponse> GetSingleAsync(int id)
         {
             try

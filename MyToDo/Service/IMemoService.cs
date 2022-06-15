@@ -1,4 +1,7 @@
-﻿using MyToDo.Common.Models;
+﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
+using MyToDo.Api.Service;
+using MyToDo.Common.Models;
+using MyToDo.Shared.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +11,6 @@ using System.Threading.Tasks;
 namespace MyToDo.Service
 {
     public interface IMemoService : IBaseService<MemoDto>
-    {
+    { 
     }
 }

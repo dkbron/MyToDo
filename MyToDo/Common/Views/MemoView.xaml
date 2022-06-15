@@ -5,8 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyToDo.Common.Views"
              xmlns:materialDesign ="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:citv="clr-namespace:MyToDo.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <citv:IntToVisibilityConverter x:Key="IntToVisibility" />
+    </UserControl.Resources>
     <materialDesign:DialogHost>
         <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
             <materialDesign:DrawerHost.RightDrawerContent>
@@ -14,30 +20,21 @@
                     <TextBlock Text="备忘录"
                                FontSize="20"
                                Margin="20"
-                               FontWeight="Bold" />
-                    <StackPanel Orientation="Horizontal"
-                                Margin="20 0">
-                        <TextBlock Text="状态:"
-                                   VerticalAlignment="Center" />
-                        <ComboBox Width="80"
-                                  Margin="10 0"
-                                  VerticalAlignment="Center">
-                            <ComboBoxItem Content="全部" />
-                            <ComboBoxItem Content="代办" />
-                            <ComboBoxItem Content="已完成" />
-                        </ComboBox>
-                    </StackPanel>
+                               FontWeight="Bold" /> 
                     <TextBox materialDesign:HintAssist.Hint="请输入备忘概要"
+                             Text="{Binding CurrentDto.Title}"
                              Margin="20 10"
                              Width="250" />
                     <TextBox materialDesign:HintAssist.Hint="请输入备忘事项内容"
+                             Text="{Binding CurrentDto.Content}"
                              Margin="20 10"
                              Width="250"
                              Height="90"
                              Cursor="Arrow" />
                     <Button Content="添加到备忘录"
-                            Margin="20 0" />
-
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="更新"
+                            Margin="20 0" /> 
                 </StackPanel>
             </materialDesign:DrawerHost.RightDrawerContent>
             <Grid>
@@ -52,15 +49,35 @@
                     <TextBox Width="250"
                              Margin="10 0 0 0"
                              VerticalAlignment="Center"
+                             Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="查找备忘事项..."
-                             materialDesign:TextFieldAssist.HasClearButton="True" />  
+                             materialDesign:TextFieldAssist.HasClearButton="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter"  
+                                        Command="{Binding ExecuteCommand}"
+                                        CommandParameter="查询" />
+                        </TextBox.InputBindings>
+                    </TextBox> 
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding MemoDtos.Count, Converter={StaticResource IntToVisibility}}">
+                    <Image Source="/Images/user.jpeg"
+                           Width="100"
+                           Height="100" />
+                    <TextBlock Margin="0 10 0 0"
+                               FontSize="15"
+                               HorizontalAlignment="Center"
+                               Text="尝试加入一些备忘事项，以便在此处查看它们。" />
                 </StackPanel>
 
                 <Button Content="+添加备忘录"
                         Margin="10 5"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Command="{Binding AddMemoCommand}" />
+                        Command="{Binding ExecuteCommand}"
+                        CommandParameter="新增"/>
 
                 <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <ItemsControl ItemsSource="{Binding MemoDtos}"
@@ -84,13 +101,21 @@
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
 
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                <i:InvokeCommandAction CommandParameter="{Binding}"
+                                                                       Command="{Binding DataContext.SelectedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+
                                         <Border Grid.RowSpan="2"
                                                 CornerRadius="3"
-                                                Background="#51AE4A" />
-
+                                                Background="#51AE4A"/>
                                         <materialDesign:PopupBox HorizontalAlignment="Right"
                                                                  Panel.ZIndex="1">
-                                            <Button Content="删除" />
+                                            <Button Content="删除" 
+                                                    CommandParameter="{Binding}"
+                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" />
                                         </materialDesign:PopupBox>
 
                                         <TextBlock Text="{Binding Title}"

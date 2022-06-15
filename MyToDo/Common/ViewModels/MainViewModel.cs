@@ -13,11 +13,10 @@ using System.Threading.Tasks;
 
 namespace MyToDo.Common.ViewModels
 {
-    class MainViewModel : BindableBase
+    class MainViewModel : BindableBase, IConfigureService
     {
         public MainViewModel(IRegionManager regionManager)
-        {
-            CreateMenuBar();
+        { 
             this.regionManager = regionManager;
             NavigateCommand = new DelegateCommand<MenuBar>(Navigate);
 
@@ -80,6 +79,12 @@ namespace MyToDo.Common.ViewModels
 
             modificationAction?.Invoke(theme);
             paletteHelper.SetTheme(theme);
+        }
+
+        public void Configure() 
+        {
+            CreateMenuBar();
+            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
         }
     }
 }
