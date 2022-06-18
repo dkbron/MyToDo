@@ -182,3 +182,9 @@ C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\AboutMoreView.ba
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\ProgressView.baml
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\SkinView.baml
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\SystemConfigView.baml
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddMemoView.g.cs
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddToDoView.g.cs
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddMemoView.baml
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddToDoView.baml
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\MsgView.g.cs
+C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\MsgView.baml

@@ -1,7 +1,9 @@
 ﻿using DryIoc;
 using MyToDo.Common;
 using MyToDo.Common.ViewModels;
+using MyToDo.Common.ViewModels.Dialogs;
 using MyToDo.Common.Views;
+using MyToDo.Common.Views.Dialogs;
 using MyToDo.Service;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -40,8 +42,10 @@ namespace MyToDo
             containerRegistry.GetContainer().RegisterInstance(@"https://localhost:44356/", serviceKey: "webUrl");
 
             containerRegistry.Register<IToDoService, ToDoService>();
-            containerRegistry.Register<IMemoService, MemoService>();
+            containerRegistry.Register<IMemoService, MemoService>();   
+            containerRegistry.Register<IDialogHostService, DialogHostService>();
 
+            containerRegistry.RegisterForNavigation<AddToDoView, AddToDoViewModel>();
             containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>();
             containerRegistry.RegisterForNavigation<ToDoView, ToDoViewModel>();
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();

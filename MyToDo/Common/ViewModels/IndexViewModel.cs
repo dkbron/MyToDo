@@ -1,5 +1,7 @@
 ﻿using MyToDo.Common.Models;
+using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,11 +13,32 @@ namespace MyToDo.Common.ViewModels
 {
     public class IndexViewModel : BindableBase
     {
-        public IndexViewModel()
+        public IndexViewModel(IDialogHostService dialog)
         {
-            CreateTaskBar();
-            CreateListBoxData();
+            ExecuteCommand = new DelegateCommand<string>(Execute);
+
+            CreateTaskBar(); 
+            this.dialog = dialog;
         }
+
+        private void Execute(string obj)
+        {
+            if (String.IsNullOrWhiteSpace(obj))
+                return;
+            switch (obj) 
+            {
+                case "添加待办":
+                    dialog.ShowDialog("AddToDoView", null);
+                    break;
+                case "添加备忘":
+                    dialog.ShowDialog("AddMemoView", null);
+                    break;
+            }
+
+        }
+
+        #region 属性
+        public DelegateCommand<string> ExecuteCommand{ get; private set; }
 
         private ObservableCollection<TaskBar> taskBars;
         public ObservableCollection<TaskBar> TaskBars 
@@ -44,6 +67,7 @@ namespace MyToDo.Common.ViewModels
         }
 
         private ObservableCollection<MemoDto> memoDtos;
+        private readonly IDialogHostService dialog;
 
         public ObservableCollection<MemoDto> MemoDtos
         {
@@ -55,7 +79,7 @@ namespace MyToDo.Common.ViewModels
             }
         }
 
-
+        #endregion
 
         public void CreateTaskBar()
         {

@@ -10,6 +10,15 @@
     <Compile Update="Common\Views\AboutMoreView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Common\Views\Dialogs\AddMemoView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Common\Views\Dialogs\AddToDoView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Common\Views\Dialogs\MsgView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Common\Views\IndexView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Common\Views\AboutMoreView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Common\Views\Dialogs\AddMemoView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Common\Views\Dialogs\AddToDoView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Common\Views\Dialogs\MsgView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Common\Views\IndexView.xaml">

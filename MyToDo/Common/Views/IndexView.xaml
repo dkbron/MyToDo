@@ -113,6 +113,8 @@
                             Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
                             Background="Yellow"
                             DockPanel.Dock="Right"
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="添加待办"
                             VerticalAlignment="Top">
                         <materialDesign:PackIcon Kind="Add" />
                     </Button>

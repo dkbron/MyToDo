@@ -9,4 +9,7 @@ FC:\Learning\MyToDo\MyToDo\Common\Views\SettingView.xaml;;
 FC:\Learning\MyToDo\MyToDo\Common\Views\SkinView.xaml;;
 FC:\Learning\MyToDo\MyToDo\Common\Views\SystemConfigView.xaml;;
 FC:\Learning\MyToDo\MyToDo\Common\Views\ToDoView.xaml;;
+FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\AddMemoView.xaml;;
+FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\AddToDoView.xaml;;
+FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\MsgView.xaml;;
 

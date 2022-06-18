@@ -31,7 +31,7 @@
             <RowDefinition Height="483*" />
         </Grid.RowDefinitions>
         <materialDesign:DialogHost x:Name="DialogHost"
-            Identifier="RootDialog"
+            Identifier="Root"
                                    DialogTheme="Inherit"
                                    SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}"
                                    Grid.RowSpan="3">
