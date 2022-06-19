@@ -15,12 +15,13 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="温馨提示"
+        <TextBlock d:Text="温馨提示"
+                   Text="{Binding Title}"
                    FontSize="20"
                    FontWeight="Bold" />
 
-        <TextBlock Grid.Row="1" VerticalAlignment="Center"
-            d:Text="确定删除该数据吗"
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+            d:Text="确定删除该数据吗?"
                    Text="{Binding Content}"
                    FontSize="14" />
 

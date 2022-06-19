@@ -45,6 +45,7 @@ namespace MyToDo
             containerRegistry.Register<IMemoService, MemoService>();   
             containerRegistry.Register<IDialogHostService, DialogHostService>();
 
+            containerRegistry.RegisterForNavigation<MsgView, MsgViewModel>();
             containerRegistry.RegisterForNavigation<AddToDoView, AddToDoViewModel>();
             containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>();
             containerRegistry.RegisterForNavigation<ToDoView, ToDoViewModel>();
