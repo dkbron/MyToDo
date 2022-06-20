@@ -1,5 +1,7 @@
 ﻿using MyToDo.Common.Models;
+using MyToDo.Service;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
@@ -11,14 +13,25 @@ using System.Threading.Tasks;
 
 namespace MyToDo.Common.ViewModels
 {
-    public class IndexViewModel : BindableBase
+    public class IndexViewModel : NavigationViewModel
     {
-        public IndexViewModel(IDialogHostService dialog)
+        private readonly IDialogHostService dialog;
+        private readonly IContainerProvider container;
+
+        private readonly IToDoService toDoService;
+        private readonly IMemoService memoService;
+        public IndexViewModel(IDialogHostService dialog, IContainerProvider container):base(container)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
 
             CreateTaskBar(); 
             this.dialog = dialog;
+            this.container = container;
+
+            ToDoDtos = new ObservableCollection<ToDoDto>();
+            MemoDtos = new ObservableCollection<MemoDto>();
+            toDoService = container.Resolve<IToDoService>();
+            memoService = container.Resolve<IMemoService>();
         }
 
         private void Execute(string obj)
@@ -28,13 +41,105 @@ namespace MyToDo.Common.ViewModels
             switch (obj) 
             {
                 case "添加待办":
-                    dialog.ShowDialog("AddToDoView", null);
+                    CurrentToDoDto = new ToDoDto();
+                    AddToDo();
                     break;
                 case "添加备忘":
-                    dialog.ShowDialog("AddMemoView", null);
+                    CurrentMemoDto = new MemoDto();
+                    AddMemo();
                     break;
             }
 
+        }
+
+        private ToDoDto currentToDoDto;
+
+        public ToDoDto CurrentToDoDto
+        {
+            get { return currentToDoDto; }
+            set { currentToDoDto = value; RaisePropertyChanged(); }
+        }
+
+
+        private MemoDto currentMemoDto;
+
+        public MemoDto CurrentMemoDto
+        {
+            get { return currentMemoDto; }
+            set { currentMemoDto = value; RaisePropertyChanged(); }
+        }
+
+        private async void AddToDo()
+        {
+            DialogParameters param = new DialogParameters();
+            param.Add("Model", CurrentToDoDto);
+            var dialogResult = await dialog.ShowDialog("AddToDoView", param);
+
+            if (dialogResult.Result == ButtonResult.No)
+                return;
+
+            var toDo = dialogResult.Parameters.GetValue<ToDoDto>("Model");
+
+            if (toDo == null)
+                return;
+
+            if(CurrentToDoDto.Id > 0)
+            {
+                //var updateResult = await toDoService.UpdateAsync(toDo);
+                //var toDo = ToDoDtos.FirstOrDefault(t => t.Id == CurrentToDoDto.Id);
+                //if (toDo != null)
+                //{
+                //    int index = ToDoDtos.IndexOf(toDo);
+                     
+
+                //    //上方数据改变后前端数据没有更新，是深浅拷贝的问题，先移除数据后在插入数据可正常更新
+                //    ToDoDtos.Remove(toDo);
+                //    ToDoDtos.Insert(index, toDo);
+                //}
+            }
+            else
+            {
+                var addResult = await toDoService.AddAsync(toDo);
+                if (addResult.Status)
+                    ToDoDtos.Add(addResult.Result);
+            }
+        }
+
+        private async void AddMemo()
+        {
+            DialogParameters param = new DialogParameters();
+            param.Add("Model", CurrentMemoDto);
+            var dialogResult = await dialog.ShowDialog("AddMemoView", param);
+
+            if (dialogResult.Result == ButtonResult.No)
+                return;
+
+            var memo = dialogResult.Parameters.GetValue<MemoDto>("Model");
+
+            if (memo == null)
+                return;
+
+            if (CurrentMemoDto.Id > 0)
+            {
+                var updateResult = await memoService.UpdateAsync(memo);
+                if(updateResult.Status)
+                {
+                    var meMo = MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
+                    if (meMo != null)
+                    {
+                        int index = MemoDtos.IndexOf(meMo); 
+
+                        MemoDtos.Remove(meMo);
+                        MemoDtos.Insert(index, meMo);
+                    }
+                }
+            }
+            else
+            {
+                var addResult = await memoService.AddAsync(memo);
+                if (addResult.Status)
+                    MemoDtos.Add(addResult.Result);
+            }
         }
 
         #region 属性
@@ -67,7 +172,7 @@ namespace MyToDo.Common.ViewModels
         }
 
         private ObservableCollection<MemoDto> memoDtos;
-        private readonly IDialogHostService dialog;
+
 
         public ObservableCollection<MemoDto> MemoDtos
         {

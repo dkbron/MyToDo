@@ -1,6 +1,8 @@
-﻿using MyToDo.Extensions;
+﻿using MaterialDesignThemes.Wpf;
+using MyToDo.Extensions;
 using Prism.DryIoc;
 using Prism.Events;
+using Prism.Ioc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +24,12 @@ namespace MyToDo.Common.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView(IEventAggregator aggregator)
+        private readonly IContainerProvider container;
+        IDialogHostService dialogService;
+        public MainView(IEventAggregator aggregator, IContainerProvider container)
         {
             InitializeComponent();
+             
 
             aggregator.Register(args =>
             {
@@ -40,6 +45,9 @@ namespace MyToDo.Common.Views
             {
                 drawerHost.IsLeftDrawerOpen = false;
             };
+
+            this.container = container; 
+            dialogService = container.Resolve<IDialogHostService>();
         }
          
 
@@ -65,8 +73,11 @@ namespace MyToDo.Common.Views
                 this.WindowState = WindowState.Minimized;
             };
 
-            btnClose.Click += (sender, e) =>
+            btnClose.Click += async (sender, e) =>
             {
+                var result =  await dialogService.Question("温馨提示","确认关闭程序?");
+                if (result.Result == Prism.Services.Dialogs.ButtonResult.No)
+                    return;
                 Close();
             };
 

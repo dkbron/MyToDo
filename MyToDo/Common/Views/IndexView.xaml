@@ -155,7 +155,10 @@
                             Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
                             Background="Yellow"
                             DockPanel.Dock="Right"
-                            VerticalAlignment="Top">
+                            VerticalAlignment="Top"
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="添加备忘"
+                            >
                         <materialDesign:PackIcon Kind="Add" />
                     </Button>
                 </DockPanel>

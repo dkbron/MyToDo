@@ -21,23 +21,23 @@
         <DockPanel Grid.Row="1" Margin="20 10" LastChildFill="False">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="20 10">
                 <TextBlock Text="状态:" VerticalAlignment="Center" />
-                <ComboBox Margin="10 0" Width="60" VerticalAlignment="Center">
+                <ComboBox Margin="10 0" Width="60" VerticalAlignment="Center" SelectedIndex="{Binding ToDoDto.Status}">
                     <ComboBoxItem>待办</ComboBoxItem>
                     <ComboBoxItem>已完成</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
 
-            <StackPanel  Margin="20 0"> 
-                <TextBox  md:HintAssist.Hint="请输入待办事项概要" MinWidth="600" />
+            <DockPanel  Margin="20 0">
+                <TextBox  md:HintAssist.Hint="请输入待办事项概要" Text="{Binding ToDoDto.Title}" DockPanel.Dock="Top" MinWidth="420"/>
 
-                <TextBox Margin="0 10"
-                    MinHeight="150"
-                         MinWidth="600"
+                <TextBox Margin="0 10" HorizontalAlignment="Stretch"
+                         Text="{Binding ToDoDto.Content}"
+                    MinHeight="120"
+                         MinWidth="420"
                          md:HintAssist.Hint="请输入待办事项"
                          AcceptsReturn="True"
                          TextWrapping="Wrap" />
-            </StackPanel>
-            
+            </DockPanel> 
         </DockPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

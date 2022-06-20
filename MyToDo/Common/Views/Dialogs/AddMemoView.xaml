@@ -4,10 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyToDo.Common.Views.Dialogs"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="150"
-             d:DesignWidth="300">
+             Width="500"
+             Height="350">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="20">
+            <TextBlock Text="添加备忘事项"
+                       FontSize="20"
+                       FontWeight="Bold" />
+        </StackPanel>
+
+        <DockPanel Grid.Row="1"
+                   Margin="20 10"
+                   LastChildFill="False">
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Top"
+                        Margin="20 10">
+                <TextBlock Text="状态:"
+                           VerticalAlignment="Center" />
+                <ComboBox Margin="10 0"
+                          Width="60"
+                          VerticalAlignment="Center" 
+                          SelectedIndex="{Binding MemoDto.Status}">
+                    <ComboBoxItem>待办</ComboBoxItem>
+                    <ComboBoxItem>已完成</ComboBoxItem>
+                </ComboBox>
+            </StackPanel> 
+
+            <DockPanel  Margin="20 0">
+                <TextBox  md:HintAssist.Hint="请输入备忘事项概要"
+                          Text="{Binding MemoDto.Title}"
+                          DockPanel.Dock="Top"
+                          MinWidth="420" />
+
+                <TextBox Margin="0 10"
+                         HorizontalAlignment="Stretch"
+                         MinHeight="120"
+                         MinWidth="420"
+                         md:HintAssist.Hint="请输入备忘事项"
+                         Text="{Binding MemoDto.Content}"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap" />
+            </DockPanel>
+
+        </DockPanel>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Margin="10"
+                    Content="确认"
+                    Command="{Binding SaveCommand}" />
+            <Button Margin="10 "
+                    Style="{StaticResource MaterialDesignPaperButton}"
+                    Content="取消"
+                    Command="{Binding CancelCommand}" />
+        </StackPanel>
     </Grid>
 </UserControl>
