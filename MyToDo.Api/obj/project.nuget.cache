@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "J/g3xKEfeAXChsmlSPa+GVWr84HvhpnIV/eJjcitfznYkZYuPk1kPZDaZ3ULbd4qPVqQ93KtcaBxiqJUp1FbNQ==",
+  "dgSpecHash": "1mpY3vGLsrQDNn+7AH1Og1hg2a0coWxxkheFMLY/ssCeHOI41pHPGYe4Ya7s39UV00rr0OQgKegLyHhEJB9XvQ==",
   "success": true,
   "projectFilePath": "C:\\Learning\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj",
   "expectedPackageFiles": [
@@ -41,8 +41,7 @@
     "C:\\Users\\34272\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\34272\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\34272\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
-    "C:\\Users\\34272\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
-    "C:\\Users\\34272\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.16\\microsoft.netcore.app.host.win-x64.5.0.16.nupkg.sha512"
+    "C:\\Users\\34272\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
   ],
   "logs": []
 }
