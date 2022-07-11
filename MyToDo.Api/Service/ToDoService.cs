@@ -117,6 +117,15 @@ namespace MyToDo.Api.Service
 
         }
 
+        public Task<ApiResponse> Summary()
+        {
+            try
+            {
+                var repository = unitOfWork.GetRepository<ToDo>();
+
+            }
+        }
+
         public async Task<ApiResponse> UpdateAsync(ToDoDto model)
         {
             try
