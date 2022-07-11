@@ -1,5 +1,6 @@
 ﻿using MyToDo.Common.Models;
 using MyToDo.Service;
+using MyToDo.Shared.Parameters;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -32,6 +33,8 @@ namespace MyToDo.Common.ViewModels
             MemoDtos = new ObservableCollection<MemoDto>();
             toDoService = container.Resolve<IToDoService>();
             memoService = container.Resolve<IMemoService>();
+
+            CreateDataAsync();
         }
 
         private void Execute(string obj)
@@ -49,7 +52,6 @@ namespace MyToDo.Common.ViewModels
                     AddMemo();
                     break;
             }
-
         }
 
         private ToDoDto currentToDoDto;
@@ -82,20 +84,21 @@ namespace MyToDo.Common.ViewModels
 
             if (toDo == null)
                 return;
-
-            if(CurrentToDoDto.Id > 0)
+              
+            if (CurrentToDoDto.Id > 0)
             {
-                //var updateResult = await toDoService.UpdateAsync(toDo);
-                //var toDo = ToDoDtos.FirstOrDefault(t => t.Id == CurrentToDoDto.Id);
-                //if (toDo != null)
-                //{
-                //    int index = ToDoDtos.IndexOf(toDo);
-                     
+                var updateResult = await toDoService.UpdateAsync(toDo);
+                if (updateResult.Status)
+                {
+                    var toDoDto = ToDoDtos.FirstOrDefault(t => t.Id == CurrentToDoDto.Id); 
+                    if (toDoDto != null)
+                    {
+                        int index = ToDoDtos.IndexOf(toDoDto);
 
-                //    //上方数据改变后前端数据没有更新，是深浅拷贝的问题，先移除数据后在插入数据可正常更新
-                //    ToDoDtos.Remove(toDo);
-                //    ToDoDtos.Insert(index, toDo);
-                //}
+                        ToDoDtos.Remove(toDoDto);
+                        ToDoDtos.Insert(index, toDoDto);
+                    }
+                }
             }
             else
             {
@@ -124,13 +127,13 @@ namespace MyToDo.Common.ViewModels
                 var updateResult = await memoService.UpdateAsync(memo);
                 if(updateResult.Status)
                 {
-                    var meMo = MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
-                    if (meMo != null)
+                    var memoDto = MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
+                    if (memoDto != null)
                     {
-                        int index = MemoDtos.IndexOf(meMo); 
+                        int index = MemoDtos.IndexOf(memoDto); 
 
-                        MemoDtos.Remove(meMo);
-                        MemoDtos.Insert(index, meMo);
+                        MemoDtos.Remove(memoDto);
+                        MemoDtos.Insert(index, memoDto);
                     }
                 }
             }
@@ -185,6 +188,46 @@ namespace MyToDo.Common.ViewModels
         }
 
         #endregion
+
+        private async void CreateDataAsync()
+        {
+            UpdateLoading(true);
+             
+            var result = await memoService.GetAllAsync(
+                new QueryParameter
+                {
+                    PageIndex = 0,
+                    PageSize = 100, 
+                });
+
+            if (result.Status)
+            {
+                memoDtos.Clear();
+                foreach (var item in result.Result.Items)
+                {
+                    MemoDtos.Add(item);
+                }
+            }
+             
+            var toDoResult = await toDoService.GetAllFilterAsync(
+                new ToDoParameter
+                {
+                    PageIndex = 0,
+                    PageSize = 100, 
+                    StatusIndex = null
+                });
+
+            if (toDoResult.Status)
+            {
+                ToDoDtos.Clear();
+                foreach (var toDoItem in toDoResult.Result.Items)
+                {
+                    ToDoDtos.Add(toDoItem);
+                }
+            }
+
+            UpdateLoading(false);
+        }
 
         public void CreateTaskBar()
         {
