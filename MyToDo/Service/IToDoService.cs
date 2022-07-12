@@ -1,6 +1,6 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using MyToDo.Api.Service;
-using MyToDo.Common.Models;
+using MyToDo.Api.Service; 
+using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,8 @@ namespace MyToDo.Service
     public interface IToDoService : IBaseService<ToDoDto>
     {
 
-        public Task<ApiResponse<PagedList<ToDoDto>>> GetAllFilterAsync(ToDoParameter parameter);
+        Task<ApiResponse<PagedList<ToDoDto>>> GetAllFilterAsync(ToDoParameter parameter);
+
+        Task<ApiResponse<SummaryDto>> GetSummaryAsync();
     }
 }

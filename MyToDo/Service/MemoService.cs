@@ -1,6 +1,6 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 using MyToDo.Api.Service;
-using MyToDo.Common.Models;
+using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using System;
 using System.Collections.Generic;

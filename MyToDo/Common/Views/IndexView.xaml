@@ -120,8 +120,7 @@
                     </Button>
                 </DockPanel>
 
-                <ListBox 
-                    ItemsSource="{Binding ToDoDtos}" 
+                <ListBox ItemsSource="{Binding SummaryDtos.ToDoDtos}" 
                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                     HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
@@ -135,7 +134,8 @@
                                                Margin="5,0"
                                                Text="{Binding Content}" />
                                 </StackPanel> 
-                                <ToggleButton DockPanel.Dock="Right" />
+                                <ToggleButton DockPanel.Dock="Right" Command="{Binding CompletedCommand}"
+                                              CommandParameter="{Binding}"/>
                             </DockPanel>
                              
                         </DataTemplate>
@@ -163,7 +163,7 @@
                     </Button>
                 </DockPanel>
 
-                <ListBox ItemsSource="{Binding MemoDtos}"
+                <ListBox ItemsSource="{Binding SummaryDtos.MemoDtos}"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>

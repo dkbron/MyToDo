@@ -1,6 +1,6 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 using MyToDo.Api.Service;
-using MyToDo.Common.Models;
+using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,14 @@ namespace MyToDo.Service
                 $"&StatusIndex={parameter.StatusIndex}";
             request.Parameter = parameter;
             return await client.ExcuteAsync<PagedList<ToDoDto>>(request);
+        }
+
+        public async Task<ApiResponse<SummaryDto>> GetSummaryAsync()
+        {
+            BaseRequest request = new BaseRequest();
+            request.Method = RestSharp.Method.GET;
+            request.Route = $"api/ToDo/getSummary";
+            return await client.ExcuteAsync<SummaryDto>(request);
         }
     }
 }

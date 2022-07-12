@@ -7,6 +7,8 @@ using MyToDo.Shared.Parameters;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace MyToDo.Api.Service
 {
@@ -117,12 +119,36 @@ namespace MyToDo.Api.Service
 
         }
 
-        public Task<ApiResponse> Summary()
+        public async Task<ApiResponse> Summary()
         {
             try
             {
-                var repository = unitOfWork.GetRepository<ToDo>();
+                var toDoRepository = unitOfWork.GetRepository<ToDo>();
+                var toDos = await toDoRepository.GetAllAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate));
+                  
 
+                var memoRepository = unitOfWork.GetRepository<Memo>();
+                var memos = await memoRepository.GetAllAsync(
+                    orderBy:source => source.OrderByDescending(t => t.CreateDate));
+
+                SummaryDto summary = new SummaryDto()
+                {
+                    Summary = toDos.Count,
+                    MemoCount = memos.Count, 
+                };
+
+                summary.ToDoDtos = new ObservableCollection<ToDoDto>(list: mapper.Map<List<ToDoDto>>(toDos.Where(t=>t.Status==0)));
+                summary.MemoDtos = new ObservableCollection<MemoDto>(list: mapper.Map<List<MemoDto>>(memos));
+
+                summary.CompletedCount = toDos.Count - summary.ToDoDtos.Count;
+                summary.CompletedRatio = ((toDos.Count - summary.ToDoDtos.Count) / (double)toDos.Count).ToString("0%");
+
+                return new ApiResponse(true, summary);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse(false, ex.Message);
             }
         }
 

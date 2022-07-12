@@ -32,7 +32,7 @@ namespace MyToDo.Api.Service
             }
             catch(Exception ex)
             {
-                return new ApiResponse(ex.Message);
+                return new ApiResponse(false, ex.Message);
             }
   
         }

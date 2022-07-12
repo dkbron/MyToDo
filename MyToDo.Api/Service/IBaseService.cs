@@ -12,7 +12,5 @@ namespace MyToDo.Api.Service
         Task<ApiResponse> AddAsync(T model);
         Task<ApiResponse> UpdateAsync(T model);
         Task<ApiResponse> DeleteAsync(int id);
-
-        Task<ApiResponse> Summary();
     }
 }

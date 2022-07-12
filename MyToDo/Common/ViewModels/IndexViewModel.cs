@@ -1,9 +1,10 @@
-﻿using MyToDo.Common.Models;
-using MyToDo.Service;
+﻿using MyToDo.Service;
+using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -21,19 +22,18 @@ namespace MyToDo.Common.ViewModels
 
         private readonly IToDoService toDoService;
         private readonly IMemoService memoService;
-        public IndexViewModel(IDialogHostService dialog, IContainerProvider container):base(container)
+        public IndexViewModel(IDialogHostService dialog, IContainerProvider container) : base(container)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
+            CompletedCommand = new DelegateCommand<ToDoDto>(Completed);
 
-            CreateTaskBar(); 
             this.dialog = dialog;
             this.container = container;
 
-            ToDoDtos = new ObservableCollection<ToDoDto>();
-            MemoDtos = new ObservableCollection<MemoDto>();
             toDoService = container.Resolve<IToDoService>();
             memoService = container.Resolve<IMemoService>();
 
+            UpdateTaskBar();
             CreateDataAsync();
         }
 
@@ -41,7 +41,7 @@ namespace MyToDo.Common.ViewModels
         {
             if (String.IsNullOrWhiteSpace(obj))
                 return;
-            switch (obj) 
+            switch (obj)
             {
                 case "添加待办":
                     CurrentToDoDto = new ToDoDto();
@@ -50,7 +50,7 @@ namespace MyToDo.Common.ViewModels
                 case "添加备忘":
                     CurrentMemoDto = new MemoDto();
                     AddMemo();
-                    break;
+                    break; 
             }
         }
 
@@ -84,19 +84,19 @@ namespace MyToDo.Common.ViewModels
 
             if (toDo == null)
                 return;
-              
+
             if (CurrentToDoDto.Id > 0)
             {
                 var updateResult = await toDoService.UpdateAsync(toDo);
                 if (updateResult.Status)
                 {
-                    var toDoDto = ToDoDtos.FirstOrDefault(t => t.Id == CurrentToDoDto.Id); 
+                    var toDoDto = SummaryDtos.ToDoDtos.FirstOrDefault(t => t.Id == CurrentToDoDto.Id);
                     if (toDoDto != null)
                     {
-                        int index = ToDoDtos.IndexOf(toDoDto);
+                        int index = SummaryDtos.ToDoDtos.IndexOf(toDoDto);
 
-                        ToDoDtos.Remove(toDoDto);
-                        ToDoDtos.Insert(index, toDoDto);
+                        SummaryDtos.ToDoDtos.Remove(toDoDto);
+                        SummaryDtos.ToDoDtos.Insert(index, toDoDto);
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace MyToDo.Common.ViewModels
             {
                 var addResult = await toDoService.AddAsync(toDo);
                 if (addResult.Status)
-                    ToDoDtos.Add(addResult.Result);
+                    SummaryDtos.ToDoDtos.Add(addResult.Result);
             }
         }
 
@@ -125,15 +125,15 @@ namespace MyToDo.Common.ViewModels
             if (CurrentMemoDto.Id > 0)
             {
                 var updateResult = await memoService.UpdateAsync(memo);
-                if(updateResult.Status)
+                if (updateResult.Status)
                 {
-                    var memoDto = MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
+                    var memoDto = SummaryDtos.MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
                     if (memoDto != null)
                     {
-                        int index = MemoDtos.IndexOf(memoDto); 
+                        int index = SummaryDtos.MemoDtos.IndexOf(memoDto);
 
-                        MemoDtos.Remove(memoDto);
-                        MemoDtos.Insert(index, memoDto);
+                        SummaryDtos.MemoDtos.Remove(memoDto);
+                        SummaryDtos.MemoDtos.Insert(index, memoDto);
                     }
                 }
             }
@@ -141,15 +141,16 @@ namespace MyToDo.Common.ViewModels
             {
                 var addResult = await memoService.AddAsync(memo);
                 if (addResult.Status)
-                    MemoDtos.Add(addResult.Result);
+                    SummaryDtos.MemoDtos.Add(addResult.Result);
             }
         }
 
         #region 属性
-        public DelegateCommand<string> ExecuteCommand{ get; private set; }
+        public DelegateCommand<string> ExecuteCommand { get; private set; }
+        public DelegateCommand<ToDoDto> CompletedCommand { get; private set; }
 
-        private ObservableCollection<TaskBar> taskBars;
-        public ObservableCollection<TaskBar> TaskBars 
+        private ObservableCollection<Models.TaskBar> taskBars;
+        public ObservableCollection<Models.TaskBar> TaskBars
         {
             get
             {
@@ -159,95 +160,93 @@ namespace MyToDo.Common.ViewModels
             {
                 taskBars = value;
                 RaisePropertyChanged();
-            } 
-        }
-
-        private ObservableCollection<ToDoDto> toDoDtos;
-
-        public ObservableCollection<ToDoDto> ToDoDtos
-        {
-            get { return toDoDtos; }
-            set 
-            { 
-                toDoDtos = value;
-                RaisePropertyChanged();
             }
         }
 
-        private ObservableCollection<MemoDto> memoDtos;
+        private SummaryDto summaryDtos;
 
-
-        public ObservableCollection<MemoDto> MemoDtos
+        public SummaryDto SummaryDtos
         {
-            get { return memoDtos; }
-            set
-            { 
-                memoDtos = value;
-                RaisePropertyChanged();
-            }
+            get { return summaryDtos; }
+            set { summaryDtos = value; RaisePropertyChanged(); }
         }
+
 
         #endregion
 
         private async void CreateDataAsync()
         {
             UpdateLoading(true);
-             
+
             var result = await memoService.GetAllAsync(
                 new QueryParameter
                 {
                     PageIndex = 0,
-                    PageSize = 100, 
+                    PageSize = 100,
                 });
 
             if (result.Status)
             {
-                memoDtos.Clear();
+                SummaryDtos.MemoDtos.Clear();
                 foreach (var item in result.Result.Items)
                 {
-                    MemoDtos.Add(item);
+                    SummaryDtos.MemoDtos.Add(item);
                 }
             }
-             
+
             var toDoResult = await toDoService.GetAllFilterAsync(
                 new ToDoParameter
                 {
                     PageIndex = 0,
-                    PageSize = 100, 
+                    PageSize = 100,
                     StatusIndex = null
                 });
 
             if (toDoResult.Status)
             {
-                ToDoDtos.Clear();
+                SummaryDtos.ToDoDtos.Clear();
                 foreach (var toDoItem in toDoResult.Result.Items)
                 {
-                    ToDoDtos.Add(toDoItem);
+                    SummaryDtos.ToDoDtos.Add(toDoItem);
                 }
             }
 
             UpdateLoading(false);
         }
 
-        public void CreateTaskBar()
+        private async void Completed(ToDoDto obj)
         {
-            TaskBars = new ObservableCollection<TaskBar>();
-            TaskBars.Add(new TaskBar() { Icon = "ClockFast", Title = "汇总", Content = "9", Color="#4294F7", Target="" }); 
-            TaskBars.Add(new TaskBar() { Icon = "ClockCheckOutline", Title = "已完成", Content = "8", Color= "#51AE4A", Target="" }); 
-            TaskBars.Add(new TaskBar() { Icon = "ChartLineVariant", Title = "完成比例", Content = "89%", Color= "#50B0DA", Target="" }); 
-            TaskBars.Add(new TaskBar() { Icon = "PlaylistStar", Title = "备忘录", Content = "4", Color= "#F2A43A", Target="" });  
+            var updateResult = await toDoService.UpdateAsync(obj);
+            if (updateResult.Status)
+            {
+                var todo = summaryDtos.ToDoDtos.FirstOrDefault(x => x.Id == obj.Id);
+                if (todo != null)
+                    SummaryDtos.ToDoDtos.Remove(todo);
+            }
+
         }
 
-        public void CreateListBoxData()
-        {
-            ToDoDtos = new ObservableCollection<ToDoDto>();
-            MemoDtos = new ObservableCollection<MemoDto>();
 
-            for (int i = 1; i < 10; i++)
+        public async void UpdateTaskBar()
+        {
+            var summary = await toDoService.GetSummaryAsync();
+            if (summary.Status)
             {
-                ToDoDtos.Add(new ToDoDto() { Id = i, Title =$"代办事项{i}", Content=$"{i}事件.....", Status=1, CreateDate= DateTime.Now.Date  });
-                MemoDtos.Add(new MemoDto() { Id = i, Title =$"备忘录{i}", Content=$"{i}事件.....", Status= 1, CreateDate= DateTime.Now.Date  });
+                SummaryDtos = summary.Result;
+                TaskBars = new ObservableCollection<Models.TaskBar>();
+                TaskBars.Add(new Models.TaskBar() { Icon = "ClockFast", Title = "汇总", Content = SummaryDtos.Summary.ToString(), Color = "#4294F7", Target = "" });
+                TaskBars.Add(new Models.TaskBar() { Icon = "ClockCheckOutline", Title = "已完成", Content = SummaryDtos.CompletedCount.ToString(), Color = "#51AE4A", Target = "" }); ;
+                TaskBars.Add(new Models.TaskBar() { Icon = "ChartLineVariant", Title = "完成比例", Content = SummaryDtos.CompletedRatio, Color = "#50B0DA", Target = "" });
+                TaskBars.Add(new Models.TaskBar() { Icon = "PlaylistStar", Title = "备忘录", Content = SummaryDtos.MemoCount.ToString(), Color = "#F2A43A", Target = "" });
             }
+
+
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            UpdateTaskBar();
+            base.OnNavigatedTo(navigationContext);
         }
     }
 }

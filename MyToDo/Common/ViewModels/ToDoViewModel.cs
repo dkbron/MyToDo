@@ -1,6 +1,6 @@
-﻿using MyToDo.Common.Models;
-using MyToDo.Extensions;
+﻿using MyToDo.Extensions;
 using MyToDo.Service;
+using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using Prism.Commands;
 using Prism.Ioc;
