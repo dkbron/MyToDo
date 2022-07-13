@@ -1,15 +1,4 @@
-﻿C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\GeneratedInternalTypeHelper.g.i.cs
-FC:\Learning\MyToDo\MyToDo\App.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\AboutMoreView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\AddMemoView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\AddToDoView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\Dialogs\MsgView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\IndexView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\MainView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\MemoView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\ProgressView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\SettingView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\SkinView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\SystemConfigView.xaml;;
-FC:\Learning\MyToDo\MyToDo\Common\Views\ToDoView.xaml;;
+﻿
+
+FE:\C#\MyToDo\MyToDo\Common\Views\IndexView.xaml;;
 

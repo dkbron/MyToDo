@@ -25,7 +25,7 @@ namespace MyToDo.Common.ViewModels
         public IndexViewModel(IDialogHostService dialog, IContainerProvider container) : base(container)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
-            CompletedCommand = new DelegateCommand<ToDoDto>(Completed);
+            CompletedToDoCommand = new DelegateCommand<ToDoDto>(ToDoCompleted);
 
             this.dialog = dialog;
             this.container = container;
@@ -45,11 +45,11 @@ namespace MyToDo.Common.ViewModels
             {
                 case "添加待办":
                     CurrentToDoDto = new ToDoDto();
-                    AddToDo();
+                    AddToDo(null);
                     break;
                 case "添加备忘":
                     CurrentMemoDto = new MemoDto();
-                    AddMemo();
+                    AddMemo(null);
                     break; 
             }
         }
@@ -71,7 +71,7 @@ namespace MyToDo.Common.ViewModels
             set { currentMemoDto = value; RaisePropertyChanged(); }
         }
 
-        private async void AddToDo()
+        private async void AddToDo(ToDoDto obj)
         {
             DialogParameters param = new DialogParameters();
             param.Add("Model", CurrentToDoDto);
@@ -108,7 +108,7 @@ namespace MyToDo.Common.ViewModels
             }
         }
 
-        private async void AddMemo()
+        private async void AddMemo(MemoDto obj)
         {
             DialogParameters param = new DialogParameters();
             param.Add("Model", CurrentMemoDto);
@@ -124,7 +124,7 @@ namespace MyToDo.Common.ViewModels
 
             if (CurrentMemoDto.Id > 0)
             {
-                var updateResult = await memoService.UpdateAsync(memo);
+                var updateResult = await memoService.UpdateAsync(obj);
                 if (updateResult.Status)
                 {
                     var memoDto = SummaryDtos.MemoDtos.FirstOrDefault(t => t.Id == CurrentMemoDto.Id);
@@ -143,11 +143,15 @@ namespace MyToDo.Common.ViewModels
                 if (addResult.Status)
                     SummaryDtos.MemoDtos.Add(addResult.Result);
             }
-        }
+        } 
 
         #region 属性
         public DelegateCommand<string> ExecuteCommand { get; private set; }
-        public DelegateCommand<ToDoDto> CompletedCommand { get; private set; }
+        public DelegateCommand<ToDoDto> CompletedToDoCommand { get; private set; }
+        public DelegateCommand<MemoDto> CompletedMemoCommand { get; private set; }
+
+        public DelegateCommand<ToDoDto> UpdateToDoCommand { get; private set; }
+        public DelegateCommand<MemoDto> UpdateMemoCommand { get; private set; }
 
         private ObservableCollection<Models.TaskBar> taskBars;
         public ObservableCollection<Models.TaskBar> TaskBars
@@ -214,7 +218,7 @@ namespace MyToDo.Common.ViewModels
             UpdateLoading(false);
         }
 
-        private async void Completed(ToDoDto obj)
+        private async void ToDoCompleted(ToDoDto obj)
         {
             var updateResult = await toDoService.UpdateAsync(obj);
             if (updateResult.Status)

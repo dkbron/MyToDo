@@ -1362,23 +1362,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\34272\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\DKBorn\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Learning\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj",
+      "projectUniqueName": "E:\\C#\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj",
       "projectName": "MyToDo.Api",
-      "projectPath": "C:\\Learning\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj",
-      "packagesPath": "C:\\Users\\34272\\.nuget\\packages\\",
-      "outputPath": "C:\\Learning\\MyToDo\\MyToDo.Api\\obj\\",
+      "projectPath": "E:\\C#\\MyToDo\\MyToDo.Api\\MyToDo.Api.csproj",
+      "packagesPath": "C:\\Users\\DKBorn\\.nuget\\packages\\",
+      "outputPath": "E:\\C#\\MyToDo\\MyToDo.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\34272\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\DKBorn\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1393,8 +1395,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Learning\\MyToDo\\MyToDo.Shared\\MyToDo.Shared.csproj": {
-              "projectPath": "C:\\Learning\\MyToDo\\MyToDo.Shared\\MyToDo.Shared.csproj"
+            "E:\\C#\\MyToDo\\MyToDo.Shared\\MyToDo.Shared.csproj": {
+              "projectPath": "E:\\C#\\MyToDo\\MyToDo.Shared\\MyToDo.Shared.csproj"
             }
           }
         }
@@ -1456,7 +1458,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   }
