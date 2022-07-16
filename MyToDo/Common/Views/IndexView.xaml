@@ -4,11 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:cv="clr-namespace:MyToDo.Converters"
              xmlns:local="clr-namespace:MyToDo.Common.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <cv:IntToBoolConverter x:Key="IntToBool" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -33,6 +37,11 @@
                     <Border Background="{Binding Color}"
                             CornerRadius="5"
                             Margin="10">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding DataContext.NevigateToCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                          CommandParameter="{Binding}" />
+                        </Border.InputBindings>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
@@ -143,8 +152,10 @@
                                     <TextBlock Opacity="0.5"
                                                Margin="5,0"
                                                Text="{Binding Content}" />
-                                </StackPanel> 
-                                <ToggleButton DockPanel.Dock="Right" Command="{Binding CompletedCommand}"
+                                </StackPanel>
+                                <ToggleButton DockPanel.Dock="Right" 
+                                              IsChecked="{Binding Status, Converter={StaticResource IntToBool}}"
+                                              Command="{Binding DataContext.CompletedToDoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                               CommandParameter="{Binding}"/>
                             </DockPanel> 
                         </DataTemplate>
@@ -192,8 +203,7 @@
                                     <TextBlock Opacity="0.5"
                                                Margin="5,0"
                                                Text="{Binding Content}" />
-                                </StackPanel>
-                                <ToggleButton DockPanel.Dock="Right" />
+                                </StackPanel> 
                             </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
