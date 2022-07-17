@@ -194,3 +194,6 @@ E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\MsgView.g.cs
 E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddMemoView.baml
 E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\AddToDoView.baml
 E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\Dialogs\MsgView.baml
+E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\LoginView.g.cs
+E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\LoginView.baml
+E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\MyToDo_Content.g.cs

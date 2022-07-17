@@ -13,7 +13,7 @@
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto" 
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignDarkBackground}"
         FontFamily="微软雅黑"
         mc:Ignorable="d"
@@ -31,9 +31,8 @@
             <RowDefinition Height="483*" />
         </Grid.RowDefinitions>
         <materialDesign:DialogHost x:Name="DialogHost"
-            Identifier="Root"
+                                   Identifier="Root"
                                    DialogTheme="Inherit"
-                                   SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}"
                                    Grid.RowSpan="3">
 
             <materialDesign:DrawerHost x:Name="drawerHost"
@@ -87,7 +86,15 @@
                     </DockPanel>
                 </materialDesign:DrawerHost.LeftDrawerContent>
 
-                <DockPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <materialDesign:Snackbar x:Name="snackbar" Panel.ZIndex="1" MessageQueue="{materialDesign:MessageQueue}" />
+
+
                     <materialDesign:ColorZone Padding="16"
                                               materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                               Mode="PrimaryMid"
@@ -148,13 +155,13 @@
                                        FontSize="22"
                                        Margin="50,0,0,0"
                                        AutomationProperties.Name="Material Design In XAML Toolkit"
-                                       Text="笔记本" /> 
+                                       Text="笔记本" />
                         </DockPanel>
                     </materialDesign:ColorZone>
 
-                    <ContentControl prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
+                    <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
+                </Grid>
 
-                </DockPanel>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
     </Grid>

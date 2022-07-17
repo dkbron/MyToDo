@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 E:\C#\MyToDo\MyToDo\App.xaml
-12-169910519
-
-52726560364
+13-43944718
+1-191452436
+55-1877964065
 344-713251047
-Common\Views\AboutMoreView.xaml;Common\Views\Dialogs\AddMemoView.xaml;Common\Views\Dialogs\AddToDoView.xaml;Common\Views\Dialogs\MsgView.xaml;Common\Views\IndexView.xaml;Common\Views\MainView.xaml;Common\Views\MemoView.xaml;Common\Views\ProgressView.xaml;Common\Views\SettingView.xaml;Common\Views\SkinView.xaml;Common\Views\SystemConfigView.xaml;Common\Views\ToDoView.xaml;
+Common\Views\AboutMoreView.xaml;Common\Views\Dialogs\AddMemoView.xaml;Common\Views\Dialogs\AddToDoView.xaml;Common\Views\Dialogs\MsgView.xaml;Common\Views\IndexView.xaml;Common\Views\LoginView.xaml;Common\Views\MainView.xaml;Common\Views\MemoView.xaml;Common\Views\ProgressView.xaml;Common\Views\SettingView.xaml;Common\Views\SkinView.xaml;Common\Views\SystemConfigView.xaml;Common\Views\ToDoView.xaml;
 
-True
+False
 

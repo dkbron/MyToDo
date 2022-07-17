@@ -23,7 +23,7 @@ namespace MyToDo.Common.ViewModels
             GoForwardCommand = new DelegateCommand(() =>
             { 
                 if(journal!=null && journal.CanGoForward)
-                    journal.GoForward(); 
+                    journal.GoForward();  
             });
 
             GoBackCommand = new DelegateCommand(() =>

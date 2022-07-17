@@ -5,6 +5,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\document.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +13,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\computer_pc_PNG17492.png" />
     <None Remove="Images\user.jpeg" />
+    <None Remove="Images\我的待办.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Page Remove="Common\ViewModels\SettingViewModel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\document.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\computer_pc_PNG17492.png" />
     <Resource Include="Images\user.jpeg" />
   </ItemGroup>
 

@@ -225,8 +225,8 @@ namespace MyToDo.Common.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext); 
-            var value = navigationContext.Parameters.GetValue<int>("Value");
-            StatusIndex = value;
+            if(navigationContext.Parameters.ContainsKey("Value"))
+                StatusIndex = navigationContext.Parameters.GetValue<int>("Value"); 
             CreateDataAsync();
         }
 

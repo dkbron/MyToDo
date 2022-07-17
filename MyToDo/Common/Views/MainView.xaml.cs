@@ -39,6 +39,12 @@ namespace MyToDo.Common.Views
                     DialogHost.DialogContent = new ProgressView();  
             });
 
+            aggregator.RegisterMessage(args =>
+            {
+                if(snackbar.MessageQueue!=null)
+                    snackbar.MessageQueue.Enqueue(args);
+            });
+
             InitColorZoneNavigateBtn();
 
             ListBoxMenuBar.SelectionChanged += (s, e) =>

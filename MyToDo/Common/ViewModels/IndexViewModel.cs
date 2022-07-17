@@ -3,6 +3,7 @@ using MyToDo.Service;
 using MyToDo.Shared.Dtos;
 using MyToDo.Shared.Parameters;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -21,10 +22,11 @@ namespace MyToDo.Common.ViewModels
         private readonly IDialogHostService dialog;
         private readonly IContainerProvider container;
         private readonly IRegionManager regionManager;
+        private readonly IEventAggregator aggregator;
 
         private readonly IToDoService toDoService;
         private readonly IMemoService memoService;
-        public IndexViewModel(IDialogHostService dialog, IContainerProvider container, IRegionManager regionManager) : base(container)
+        public IndexViewModel(IDialogHostService dialog, IContainerProvider container, IRegionManager regionManager, IEventAggregator aggregator) : base(container)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
             CompletedToDoCommand = new DelegateCommand<ToDoDto>(ToDoCompleted); 
@@ -35,9 +37,11 @@ namespace MyToDo.Common.ViewModels
             this.dialog = dialog;
             this.container = container;
             this.regionManager = regionManager;
-
+            this.aggregator = aggregator;
             toDoService = container.Resolve<IToDoService>();
             memoService = container.Resolve<IMemoService>();
+
+            
 
             CreateDataAsync();
         }
@@ -91,86 +95,103 @@ namespace MyToDo.Common.ViewModels
 
         private async void AddToDo(ToDoDto model)
         {
-            DialogParameters param = new DialogParameters();
+            try
+            { 
+                DialogParameters param = new DialogParameters();
 
-            if (model != null)
-                param.Add("Model", model);
-            else
-                param.Add("Model", CurrentToDoDto);
-            var dialogResult = await dialog.ShowDialog("AddToDoView", param);
+                if (model != null)
+                    param.Add("Model", model);
+                else
+                    param.Add("Model", CurrentToDoDto);
+                var dialogResult = await dialog.ShowDialog("AddToDoView", param);
 
-            if (dialogResult.Result == ButtonResult.No)
-                return;
+                if (dialogResult.Result == ButtonResult.No)
+                    return;
 
-            var toDo = dialogResult.Parameters.GetValue<ToDoDto>("Model");
+                var toDo = dialogResult.Parameters.GetValue<ToDoDto>("Model");
 
-            if (toDo == null)
-                return;
+                if (toDo == null)
+                    return;
 
-            if (toDo.Id > 0)
-            {
-                var updateResult = await toDoService.UpdateAsync(toDo);
-                if (updateResult.Status)
+                if (toDo.Id > 0)
                 {
-                    var toDoDto = SummaryDtos.ToDoDtos.FirstOrDefault(t => t.Id == toDo.Id);
-                    if (toDoDto != null)
+                    var updateResult = await toDoService.UpdateAsync(toDo);
+                    if (updateResult.Status)
                     {
-                        int index = SummaryDtos.ToDoDtos.IndexOf(toDoDto);
+                        var toDoDto = SummaryDtos.ToDoDtos.FirstOrDefault(t => t.Id == toDo.Id);
+                        if (toDoDto != null)
+                        {
+                            int index = SummaryDtos.ToDoDtos.IndexOf(toDoDto);
 
-                        SummaryDtos.ToDoDtos.Remove(toDoDto);
-                        SummaryDtos.ToDoDtos.Insert(index, toDoDto);
+                            SummaryDtos.ToDoDtos.Remove(toDoDto);
+                            SummaryDtos.ToDoDtos.Insert(index, toDoDto);
+                        }
+                        aggregator.SendMessage("已完成");
                     }
                 }
-            }
-            else
-            {
-                var addResult = await toDoService.AddAsync(toDo);
-                if (addResult.Status)
-                    SummaryDtos.ToDoDtos.Add(addResult.Result);
-            }
+                else
+                {
+                    var addResult = await toDoService.AddAsync(toDo);
+                    if (addResult.Status)
+                        SummaryDtos.ToDoDtos.Add(addResult.Result);
+                }
 
-            await UpdateTaskBar();
+                await UpdateTaskBar();  
+                aggregator.SendMessage("更新待办事项成功");
+            }
+            finally
+            { 
+            }
+           
         }
 
         private async void AddMemo(MemoDto model)
         {
-            DialogParameters param = new DialogParameters();
-            if (model != null)
-                param.Add("Model", model);
-            else
-                param.Add("Model", CurrentMemoDto);
-            var dialogResult = await dialog.ShowDialog("AddMemoView", param);
+            try
+            { 
+                DialogParameters param = new DialogParameters();
+                if (model != null)
+                    param.Add("Model", model);
+                else
+                    param.Add("Model", CurrentMemoDto);
+                var dialogResult = await dialog.ShowDialog("AddMemoView", param);
 
-            if (dialogResult.Result == ButtonResult.No)
-                return;
+                if (dialogResult.Result == ButtonResult.No)
+                    return;
 
-            var memo = dialogResult.Parameters.GetValue<MemoDto>("Model");
+                var memo = dialogResult.Parameters.GetValue<MemoDto>("Model");
 
-            if (memo == null)
-                return;
+                if (memo == null)
+                    return;
 
-            if (memo.Id > 0)
-            {
-                var updateResult = await memoService.UpdateAsync(memo);
-                if (updateResult.Status)
+                if (memo.Id > 0)
                 {
-                    var memoDto = SummaryDtos.MemoDtos.FirstOrDefault(t => t.Id == memo.Id);
-                    if (memoDto != null)
+                    var updateResult = await memoService.UpdateAsync(memo);
+                    if (updateResult.Status)
                     {
-                        int index = SummaryDtos.MemoDtos.IndexOf(memoDto);
+                        var memoDto = SummaryDtos.MemoDtos.FirstOrDefault(t => t.Id == memo.Id);
+                        if (memoDto != null)
+                        {
+                            int index = SummaryDtos.MemoDtos.IndexOf(memoDto);
 
-                        SummaryDtos.MemoDtos.Remove(memoDto);
-                        SummaryDtos.MemoDtos.Insert(index, memoDto);
+                            SummaryDtos.MemoDtos.Remove(memoDto);
+                            SummaryDtos.MemoDtos.Insert(index, memoDto);
+                        }
                     }
                 }
+                else
+                {
+                    var addResult = await memoService.AddAsync(memo);
+                    if (addResult.Status)
+                        SummaryDtos.MemoDtos.Add(addResult.Result);
+                }
+
+                await UpdateTaskBar();  
+                aggregator.SendMessage("更新备忘录成功");
             }
-            else
-            {
-                var addResult = await memoService.AddAsync(memo);
-                if (addResult.Status)
-                    SummaryDtos.MemoDtos.Add(addResult.Result);
+            finally
+            { 
             }
-            await UpdateTaskBar();
         } 
 
         #region 属性
@@ -251,17 +272,27 @@ namespace MyToDo.Common.ViewModels
 
         private async void ToDoCompleted(ToDoDto obj)
         {
-            var updateResult = await toDoService.UpdateAsync(obj);
-            if (updateResult.Status)
+            try
             {
-                var todo = summaryDtos.ToDoDtos.FirstOrDefault(x => x.Id == obj.Id);
-                if (todo != null)
+                UpdateLoading(true);
+                var updateResult = await toDoService.UpdateAsync(obj);
+                if (updateResult.Status)
                 {
-                    todo.Status = 1;
-                    summaryDtos.ToDoDtos.Remove(obj);
+                    var todo = summaryDtos.ToDoDtos.FirstOrDefault(x => x.Id == obj.Id);
+                    if (todo != null)
+                    {
+                        todo.Status = 1;
+                        summaryDtos.ToDoDtos.Remove(obj);
+                    }
+
+                    aggregator.SendMessage("已完成");
                 }
+                await UpdateTaskBar();
             }
-            await UpdateTaskBar();
+            finally
+            { 
+                UpdateLoading(false);
+            }
         } 
 
 

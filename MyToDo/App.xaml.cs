@@ -7,6 +7,7 @@ using MyToDo.Common.Views.Dialogs;
 using MyToDo.Service;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -29,11 +30,23 @@ namespace MyToDo
 
         protected override void OnInitialized()
         {
-            var service = App.Current.MainWindow.DataContext as IConfigureService;
-            if(service!=null)
-                service.Configure();
+            var dialog = Container.Resolve<IDialogService>(); 
+            dialog.ShowDialog("LoginView", callback: callback =>
+            {
+                if (callback.Result != ButtonResult.OK)
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
 
-            base.OnInitialized();
+
+                var service = App.Current.MainWindow.DataContext as IConfigureService;
+                if (service != null)
+                    service.Configure();
+
+                base.OnInitialized();
+            });
+
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -44,6 +57,8 @@ namespace MyToDo
             containerRegistry.Register<IToDoService, ToDoService>();
             containerRegistry.Register<IMemoService, MemoService>();   
             containerRegistry.Register<IDialogHostService, DialogHostService>();
+
+            containerRegistry.RegisterDialog<LoginView, LoginViewModel>();
 
             containerRegistry.RegisterForNavigation<MsgView, MsgViewModel>();
             containerRegistry.RegisterForNavigation<AddToDoView, AddToDoViewModel>();
