@@ -23,7 +23,7 @@ namespace MyToDo.Api.Service
         {
             try
             { 
-                var user = unitOfWork.GetRepository<User>().GetFirstOrDefault(predicate: a => a.Account.Equals(account) && a.Password.Equals(password));
+                var user = await unitOfWork.GetRepository<User>().GetFirstOrDefaultAsync(predicate: a => a.Account.Equals(account) && a.Password.Equals(password));
 
                 if (user == null)
                     return new ApiResponse("账号密码错误！");

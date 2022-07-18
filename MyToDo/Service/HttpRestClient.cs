@@ -42,7 +42,7 @@ namespace MyToDo.Service
                 request.AddHeader("Content-Type", baseRequest.ContentType);
                 if (baseRequest.Parameter != null)
                     request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
-                 
+                
                 client.BaseUrl = new Uri(apiUrl + baseRequest.Route);
                 var response = await client.ExecuteAsync(request);
 
