@@ -30,23 +30,27 @@ namespace MyToDo
 
         protected override void OnInitialized()
         {
-            var dialog = Container.Resolve<IDialogService>(); 
-            dialog.ShowDialog("LoginView", callback: callback =>
-            {
-                if (callback.Result != ButtonResult.OK)
-                {
-                    Application.Current.Shutdown();
-                    return;
-                }
+            //var dialog = Container.Resolve<IDialogService>(); 
+            //dialog.ShowDialog("LoginView", callback: callback =>
+            //{
+            //    if (callback.Result != ButtonResult.OK)
+            //    {
+            //        Application.Current.Shutdown();
+            //        return;
+            //    }
 
 
-                var service = App.Current.MainWindow.DataContext as IConfigureService;
-                if (service != null)
-                    service.Configure();
+            //    var service = App.Current.MainWindow.DataContext as IConfigureService;
+            //    if (service != null)
+            //        service.Configure();
 
-                base.OnInitialized();
-            });
+            //    base.OnInitialized();
+            //});
+            var service = App.Current.MainWindow.DataContext as IConfigureService;
+            if (service != null)
+                service.Configure();
 
+            base.OnInitialized();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

@@ -13,20 +13,21 @@ namespace MyToDo.Common.ViewModels
 {
     public class LoginViewModel : BindableBase, IDialogAware
     {
-        private readonly IUserService service; 
-        private readonly IRegionManager regionManager; 
+        private readonly IUserService service;  
 
         public string Title => "登录界面";
 
         public event Action<IDialogResult> RequestClose;
 
-        public bool CanCloseDialog()
+        public LoginViewModel(IUserService service)
         {
-            return true;    
+            this.service = service;
+            LoginCommand = new DelegateCommand(Login);
         }
 
-        public async void OnDialogClosed()
+        private async void Login()
         {
+
             if (string.IsNullOrEmpty(Account) || string.IsNullOrEmpty(Password))
             {
                 return;
@@ -34,14 +35,22 @@ namespace MyToDo.Common.ViewModels
             var result = await service.LoginAsync(Account, Password);
 
             if (result.Status)
-            {
-                regionManager.Regions["LoginView"].RequestNavigate("MainView");
+            { 
             }
             else
             {
                 HintAccount = "账号或密码错误";
                 HintPassword = "账号或密码错误";
             }
+        }
+
+        public bool CanCloseDialog()
+        {
+            return true;    
+        }
+
+        public void OnDialogClosed()
+        {
         }
 
         public void OnDialogOpened(IDialogParameters parameters)

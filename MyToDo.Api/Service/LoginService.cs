@@ -2,6 +2,7 @@
 using AutoMapper;
 using MyToDo.Api.Context;
 using MyToDo.Shared.Dtos;
+using MyToDo.Shared.Extensions;
 using MyToDo.Shared.Parameters;
 using System;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace MyToDo.Api.Service
         public async Task<ApiResponse> Login(string account, string password)
         {
             try
-            { 
+            {
+                password = password.GetMD5();
                 var user = await unitOfWork.GetRepository<User>().GetFirstOrDefaultAsync(predicate: a => a.Account.Equals(account) && a.Password.Equals(password));
 
                 if (user == null)
@@ -49,7 +51,7 @@ namespace MyToDo.Api.Service
 
                 if (userModel != null)
                     return new ApiResponse($"该账户 {model.Account} 已存在！");
-
+                user.Password = user.Password.GetMD5();
                 await repository.InsertAsync(user);
 
                 if (await unitOfWork.SaveChangesAsync() > 0)
