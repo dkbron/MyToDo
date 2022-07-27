@@ -11,5 +11,7 @@ namespace MyToDo.Service
     public interface IUserService : IBaseService<UserDto>
     {
         Task<ApiResponse<UserDto>> LoginAsync(string account, string password);
+
+        Task<ApiResponse<UserDto>> RegisterAsync(UserDto userDto);
     }
 }

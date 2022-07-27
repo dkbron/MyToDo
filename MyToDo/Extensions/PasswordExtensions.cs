@@ -11,12 +11,12 @@ namespace MyToDo.Extensions
 {
     public class PasswordExtensions
     {  
-        public static string GetPassWord(DependencyObject obj)
+        public static string GetPassword(DependencyObject obj)
         {
             return (string)obj.GetValue(PasswordProperty);
         }
 
-        public static void SetPassWord(DependencyObject obj, string value)
+        public static void SetPassword(DependencyObject obj, string value)
         {
             obj.SetValue(PasswordProperty, value);
         }
@@ -48,11 +48,11 @@ namespace MyToDo.Extensions
         private void AssociatedObject_PasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordBox passwordBox = sender as PasswordBox;
-            string password = PasswordExtensions.GetPassWord(passwordBox);
+            string password = PasswordExtensions.GetPassword(passwordBox);
 
             if(password!=null && passwordBox.Password != password)
             {
-                PasswordExtensions.SetPassWord(passwordBox, password);
+                PasswordExtensions.SetPassword(passwordBox, password);
             }
 
         }

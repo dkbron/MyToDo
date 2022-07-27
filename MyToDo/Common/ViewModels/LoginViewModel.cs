@@ -22,7 +22,23 @@ namespace MyToDo.Common.ViewModels
         public LoginViewModel(IUserService service)
         {
             this.service = service;
-            LoginCommand = new DelegateCommand(Login);
+            ExecuteCommand = new DelegateCommand<string>(Execute);
+        }
+
+        private void Execute(string obj)
+        {
+            switch (obj)
+            {
+                case "Login":
+                    Login();
+                    break;
+                case "Register":
+                    Register();
+                    break;
+                case "forget":
+                    ForgetPassword();
+                    break;
+            }
         }
 
         private async void Login()
@@ -35,13 +51,29 @@ namespace MyToDo.Common.ViewModels
             var result = await service.LoginAsync(Account, Password);
 
             if (result.Status)
-            { 
+            {
+                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             }
             else
             {
                 HintAccount = "账号或密码错误";
                 HintPassword = "账号或密码错误";
             }
+        }
+
+        private void LoginOut()
+        {
+            RequestClose?.Invoke(new DialogResult(ButtonResult.No));
+        }
+
+        private async void Register()
+        {
+
+        }
+
+        private async void ForgetPassword()
+        {
+
         }
 
         public bool CanCloseDialog()
@@ -51,13 +83,14 @@ namespace MyToDo.Common.ViewModels
 
         public void OnDialogClosed()
         {
+            LoginOut();
         }
 
         public void OnDialogOpened(IDialogParameters parameters)
         { 
         }
 
-        public DelegateCommand LoginCommand { get; private set; }
+        public DelegateCommand<string> ExecuteCommand { get; private set; }
 
         private string account;
 
