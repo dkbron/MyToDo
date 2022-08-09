@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using DryIoc;
+using MaterialDesignThemes.Wpf;
 using MyToDo.Common.Models;
 using MyToDo.Extensions;
 using Prism.Commands;
@@ -15,34 +16,56 @@ namespace MyToDo.Common.ViewModels
 {
     class MainViewModel : BindableBase, IConfigureService
     {
-        public MainViewModel(IRegionManager regionManager)
+
+        public MainViewModel(IRegionManager regionManager, IContainer container)
         { 
             this.regionManager = regionManager;
+            this.container = container;
+            LogoutCommand = new DelegateCommand(() =>
+            {
+                App.Logout(container);
+            });
             NavigateCommand = new DelegateCommand<MenuBar>(Navigate);
 
             GoForwardCommand = new DelegateCommand(() =>
-            { 
-                if(journal!=null && journal.CanGoForward)
-                    journal.GoForward();  
+            {
+                if (journal != null && journal.CanGoForward)
+                    journal.GoForward();
             });
 
             GoBackCommand = new DelegateCommand(() =>
             {
-                if(journal!=null && journal.CanGoBack)
-                    journal.GoBack(); 
-            }); 
+                if (journal != null && journal.CanGoBack)
+                    journal.GoBack();
+            });
         }
+
+        private string userName;
+
+        public string UserName
+        {
+            get { return userName; }
+            set { userName = value; RaisePropertyChanged(); }
+        }
+
 
         private void Navigate(MenuBar obj)
         {
-            if (obj == null || string.IsNullOrEmpty(obj.NameSpace))
+            if (obj == null)
                 return;
+              
 
-            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.NameSpace, back =>
+           MenuBar munubar = (MenuBar)obj;
+            if (string.IsNullOrEmpty(munubar.NameSpace))
+                return;
+            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(munubar.NameSpace, back =>
             {
                 journal = back.Context.NavigationService.Journal;
             });
         }
+        
+        public DelegateCommand LogoutCommand { get; private set; }
+
 
         private ObservableCollection<MenuBar> menubars;
 
@@ -61,6 +84,8 @@ namespace MyToDo.Common.ViewModels
         public DelegateCommand GoBackCommand { get; set; }
 
         public IRegionNavigationJournal journal;
+        private readonly IContainer container;
+
         public IRegionManager regionManager { get; private set; }
 
         public void CreateMenuBar()
@@ -85,6 +110,8 @@ namespace MyToDo.Common.ViewModels
         {
             CreateMenuBar();
             regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
-        }
+
+            UserName = AppSession.UserName;
+        } 
     }
 }

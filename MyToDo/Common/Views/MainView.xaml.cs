@@ -42,7 +42,7 @@ namespace MyToDo.Common.Views
             aggregator.RegisterMessage(args =>
             {
                 if(snackbar.MessageQueue!=null)
-                    snackbar.MessageQueue.Enqueue(args);
+                    snackbar.MessageQueue.Enqueue(args.Message);
             });
 
             InitColorZoneNavigateBtn();
@@ -110,7 +110,7 @@ namespace MyToDo.Common.Views
 
         private void testbtn_Click(object sender, RoutedEventArgs e)
         {
-             Background = new SolidColorBrush(Colors.White);
+             Background = new SolidColorBrush(Colors.White); 
         }
     }
 }

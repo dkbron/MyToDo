@@ -29,9 +29,18 @@ namespace MyToDo.Service
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter),ParameterType.RequestBody);
 
             client.BaseUrl = new Uri(apiUrl + baseRequest.Route);
-            var response = await client.ExecuteAsync(request);
+            var response = await client.ExecuteAsync(request); 
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ApiResponse>(response.Content);
+            else
+            {
+                return new ApiResponse()
+                {
+                    Status = false,
+                    Message = response.ErrorMessage
+                };
+            }
 
-            return JsonConvert.DeserializeObject<ApiResponse>(response.Content); 
         }
 
         public async Task<ApiResponse<T>> ExcuteAsync<T>(BaseRequest baseRequest)
@@ -41,13 +50,21 @@ namespace MyToDo.Service
                 var request = new RestRequest(baseRequest.Method);
                 request.AddHeader("Content-Type", baseRequest.ContentType);
                 if (baseRequest.Parameter != null)
-                    request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
-                
+                    request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody); 
                 client.BaseUrl = new Uri(apiUrl + baseRequest.Route);
                 var response = await client.ExecuteAsync(request);
 
-                var content = JsonConvert.DeserializeObject(response.Content); 
-                return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+                var content = JsonConvert.DeserializeObject(response.Content);
+                if (response.StatusCode==System.Net.HttpStatusCode.OK) 
+                    return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+                else
+                {
+                    return new ApiResponse<T>()
+                    {
+                        Status = false,
+                        Message = response.ErrorMessage
+                    };
+                } 
             }
             catch (Exception ex)
             {

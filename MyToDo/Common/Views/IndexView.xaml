@@ -22,7 +22,7 @@
 
         <TextBlock Margin="15"
                    FontSize="16"
-                   Text="欢迎使用，DKBorn" />
+                   Text="{Binding Title}" />
 
         <ItemsControl Grid.Row="1"
                       ItemsSource="{Binding TaskBars}">

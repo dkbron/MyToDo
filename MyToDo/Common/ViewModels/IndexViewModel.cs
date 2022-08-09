@@ -41,8 +41,8 @@ namespace MyToDo.Common.ViewModels
             toDoService = container.Resolve<IToDoService>();
             memoService = container.Resolve<IMemoService>();
 
-            
-
+            Title = $"Hello {AppSession.UserName}";
+             
             CreateDataAsync();
         }
 
@@ -217,6 +217,15 @@ namespace MyToDo.Common.ViewModels
             }
         }
 
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+            set { title = value; RaisePropertyChanged(); }
+        }
+
+
         private SummaryDto summaryDtos;
 
         public SummaryDto SummaryDtos
@@ -319,6 +328,7 @@ namespace MyToDo.Common.ViewModels
         {
             UpdateTaskBar();
             base.OnNavigatedTo(navigationContext);
+            Title = $"Hello {AppSession.UserName}";
         }
     }
 }

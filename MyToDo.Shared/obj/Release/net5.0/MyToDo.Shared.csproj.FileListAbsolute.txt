@@ -1,0 +1,12 @@
+E:\C#\MyToDo\MyToDo.Shared\bin\Release\net5.0\MyToDo.Shared.deps.json
+E:\C#\MyToDo\MyToDo.Shared\bin\Release\net5.0\MyToDo.Shared.dll
+E:\C#\MyToDo\MyToDo.Shared\bin\Release\net5.0\MyToDo.Shared.pdb
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.csproj.AssemblyReference.cache
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.GeneratedMSBuildEditorConfig.editorconfig
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.AssemblyInfoInputs.cache
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.AssemblyInfo.cs
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.csproj.CoreCompileInputs.cache
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.dll
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\refint\MyToDo.Shared.dll
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\MyToDo.Shared.pdb
+E:\C#\MyToDo\MyToDo.Shared\obj\Release\net5.0\ref\MyToDo.Shared.dll

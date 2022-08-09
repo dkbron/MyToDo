@@ -8,21 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using MyToDo.Service;
 using Prism.Regions;
+using Prism.Events;
+using MyToDo.Extensions;
 
 namespace MyToDo.Common.ViewModels
 {
     public class LoginViewModel : BindableBase, IDialogAware
     {
-        private readonly IUserService service;  
+        private readonly IUserService service;
+        private readonly IEventAggregator aggregator;
 
         public string Title => "登录界面";
 
         public event Action<IDialogResult> RequestClose;
 
-        public LoginViewModel(IUserService service)
+        public LoginViewModel(IUserService service, IEventAggregator aggregator)
         {
             this.service = service;
+            this.aggregator = aggregator;
             ExecuteCommand = new DelegateCommand<string>(Execute);
+        }
+
+        private int selectedIndex;
+
+        public int SelectedIndex
+        {
+            get { return selectedIndex; }
+            set { selectedIndex = value;  RaisePropertyChanged(); }
         }
 
         private void Execute(string obj)
@@ -32,32 +44,54 @@ namespace MyToDo.Common.ViewModels
                 case "Login":
                     Login();
                     break;
+                case "LoginOut":
+                    LoginOut();
+                    break;
                 case "Register":
                     Register();
                     break;
-                case "forget":
+                case "Forget":
                     ForgetPassword();
                     break;
+                case "GoToRegister":
+                    InitValue();
+                    SelectedIndex = 1;
+                    break;
+                case "Return":
+                    InitValue();
+                    SelectedIndex = 0;
+                    break;
             }
+        }
+
+        private void InitValue()
+        {
+            Account = String.Empty;
+            Password = String.Empty;
+            RePassword = String.Empty;
+            UserName = String.Empty;
+            ErrorMsg = String.Empty;
         }
 
         private async void Login()
         {
 
             if (string.IsNullOrEmpty(Account) || string.IsNullOrEmpty(Password))
-            {
+            { 
+                aggregator.SendMessage("输入不能为空！", "Login"); 
                 return;
             }
             var result = await service.LoginAsync(Account, Password);
 
             if (result.Status)
             {
+                AppSession.UserName = result.Result.UserName;
                 RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             }
             else
             {
-                HintAccount = "账号或密码错误";
-                HintPassword = "账号或密码错误";
+                Password = String.Empty; 
+                aggregator.SendMessage(result.Message,"Login");
             }
         }
 
@@ -68,7 +102,40 @@ namespace MyToDo.Common.ViewModels
 
         private async void Register()
         {
+            if (string.IsNullOrEmpty(Account) 
+                || string.IsNullOrEmpty(Password)
+                ||string.IsNullOrEmpty(RePassword)
+                ||string.IsNullOrEmpty(UserName)
+                )
+            {
+                aggregator.SendMessage("输入不能为空！", "Login");
+                return;
+            }
 
+            if(Password != RePassword)
+            {
+                aggregator.SendMessage("密码重复输入错误！", "Login"); 
+                return;
+            }
+            var result = await service.RegisterAsync(new Shared.Dtos.UserDto() { Account = Account, Password = Password, UserName = UserName});
+             
+            if(result == null)
+            {
+                return;
+            }
+
+            if (result.Status)
+            { 
+                SelectedIndex = 0;
+            }
+            else
+            { 
+                Account = String.Empty;
+                Password = String.Empty;
+                RePassword = String.Empty;
+                UserName = String.Empty;
+                aggregator.SendMessage(result.Message, "Login"); 
+            }
         }
 
         private async void ForgetPassword()
@@ -100,6 +167,16 @@ namespace MyToDo.Common.ViewModels
             set { account = value; RaisePropertyChanged(); }
         }
 
+        private string hintColor = "Black";
+
+        public string HintColor
+        {
+            get { return hintColor; }
+            set { hintColor = value;  RaisePropertyChanged(); }
+        }
+
+
+
         private string password;
 
         public string Password
@@ -108,21 +185,33 @@ namespace MyToDo.Common.ViewModels
             set { password = value; RaisePropertyChanged(); }
         }
 
-        private string hintAccount = "请输入账号";
+        private string rePassword;
 
-        public string HintAccount
+        public string RePassword
         {
-            get { return hintAccount; }
-            set { hintAccount = value; RaisePropertyChanged(); }
+            get { return rePassword; }
+            set { rePassword = value; RaisePropertyChanged(); }
         }
 
-        private string hintPassword = "请输入密码";
 
-        public string HintPassword
+        private string userName;
+
+        public string UserName
         {
-            get { return hintPassword; }
-            set { hintPassword = value; RaisePropertyChanged(); }
+            get { return userName; }
+            set { userName = value; RaisePropertyChanged(); }
         }
-         
+
+        private string errorMsg = string.Empty;
+
+        public string ErrorMsg
+        {
+            get { return errorMsg; }
+            set { errorMsg = value; RaisePropertyChanged(); }
+        }
+
+
+
+
     }
 }

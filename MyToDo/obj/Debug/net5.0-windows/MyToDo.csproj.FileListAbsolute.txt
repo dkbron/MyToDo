@@ -200,3 +200,4 @@ E:\C#\MyToDo\MyToDo\obj\Debug\net5.0-windows\MyToDo_Content.g.cs
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\LoginView.g.cs
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\MyToDo_Content.g.cs
 C:\Learning\MyToDo\MyToDo\obj\Debug\net5.0-windows\Common\Views\LoginView.baml
+E:\C#\MyToDo\MyToDo\bin\Debug\net5.0-windows\todo.db

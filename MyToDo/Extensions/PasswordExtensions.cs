@@ -50,9 +50,9 @@ namespace MyToDo.Extensions
             PasswordBox passwordBox = sender as PasswordBox;
             string password = PasswordExtensions.GetPassword(passwordBox);
 
-            if(password!=null && passwordBox.Password != password)
+            if(passwordBox.Password != password)
             {
-                PasswordExtensions.SetPassword(passwordBox, password);
+                PasswordExtensions.SetPassword(passwordBox, passwordBox.Password);
             }
 
         }

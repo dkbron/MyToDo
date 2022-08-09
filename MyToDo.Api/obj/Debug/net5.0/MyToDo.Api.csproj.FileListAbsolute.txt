@@ -118,3 +118,4 @@ C:\Learning\MyToDo\MyToDo.Api\obj\Debug\net5.0\refint\MyToDo.Api.dll
 C:\Learning\MyToDo\MyToDo.Api\obj\Debug\net5.0\MyToDo.Api.pdb
 C:\Learning\MyToDo\MyToDo.Api\obj\Debug\net5.0\MyToDo.Api.genruntimeconfig.cache
 C:\Learning\MyToDo\MyToDo.Api\obj\Debug\net5.0\ref\MyToDo.Api.dll
+E:\C#\MyToDo\MyToDo.Api\bin\Debug\net5.0\todo.db

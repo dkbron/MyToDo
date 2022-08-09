@@ -28,9 +28,11 @@ namespace MyToDo
             return Container.Resolve<MainView>();
         }
 
-        protected override void OnInitialized()
+        public static void Logout(IContainer container)
         {
-            var dialog = Container.Resolve<IDialogService>();
+            var dialog = container.Resolve<IDialogService>();
+
+            Current.MainWindow.Hide();
             dialog.ShowDialog("LoginView", callback: callback =>
             {
                 if (callback.Result != ButtonResult.OK)
@@ -38,17 +40,36 @@ namespace MyToDo
                     Application.Current.Shutdown();
                     return;
                 }
-
-
                 var service = App.Current.MainWindow.DataContext as IConfigureService;
                 if (service != null)
                     service.Configure();
-
-                base.OnInitialized();
+                Current.MainWindow.Show();
             });
+        }
+
+        protected override void OnInitialized()
+        {
+            var dialog = Container.Resolve<IDialogService>();
+            var service = App.Current.MainWindow.DataContext as IConfigureService;
+            if (service != null)
+                service.Configure(); 
+            base.OnInitialized();
+            App.Current.MainWindow.Hide();
+            dialog.ShowDialog("LoginView", callback: callback =>
+            {
+
+                if (callback.Result != ButtonResult.OK)
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
+                App.Current.MainWindow.Show();
+            });
+
             //var service = App.Current.MainWindow.DataContext as IConfigureService;
             //if (service != null)
             //    service.Configure();
+
 
             //base.OnInitialized();
         }
@@ -56,7 +77,7 @@ namespace MyToDo
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
-            containerRegistry.GetContainer().RegisterInstance(@"https://localhost:44356/", serviceKey: "webUrl");
+            containerRegistry.GetContainer().RegisterInstance(@"http://localhost:3344/", serviceKey: "webUrl");
 
             containerRegistry.Register<IToDoService, ToDoService>();
             containerRegistry.Register<IMemoService, MemoService>();   
